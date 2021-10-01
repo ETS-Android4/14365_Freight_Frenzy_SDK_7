@@ -13,7 +13,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
-// TODO: Wait for new season!
+// TODO: Prepare whatever needs to be done with tele-op as it comes up
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;

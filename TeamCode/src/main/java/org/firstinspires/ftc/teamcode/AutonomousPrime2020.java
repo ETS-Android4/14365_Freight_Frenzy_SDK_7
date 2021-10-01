@@ -45,8 +45,7 @@ import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 
-// TODO: Wait for new season!
-// Deleted branch; does it update?
+// TODO: Prepare  code specifically for the mechanical ideas we came up with
 
 @Disabled
 @Autonomous(name="AutonomousPrime2020", group="Linear Opmode")
