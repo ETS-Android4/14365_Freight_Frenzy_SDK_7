@@ -12,14 +12,17 @@ public class PositionTest extends AutonomousPrime2020 {
         mapObjects();
         waitForStart();
 
-        while(opModeIsActive()){
-            updateDist();
-            telemetry.addData("Left Dist: ", readLeftDist);
-            telemetry.addData("Right Dist: ", readRightDist);
-            telemetry.addData("Front Dist: ", readFrontDist);
-            telemetry.addData("Back Dist: ", readBackDist);
+        double distFromWall = 100;
+
+        while(distFromWall>=20) {
+            strafeRightEncoder(2, 1);
+            telemetry.addData("Distance From Wall: ", distFromWall);
             telemetry.update();
+            updateRightDist();
+            distFromWall = readRightDist;
+
         }
+
 
         /*forwardEncoder(130, 1);
         pause(0.1);
@@ -27,6 +30,7 @@ public class PositionTest extends AutonomousPrime2020 {
 
         //telemetry.addData("Hello!", " World!");
         //pause(10);
+
         /*leftEncoder(90, 0.25);
         pause(0.75);
         zeroBotEncoder(0.25);
