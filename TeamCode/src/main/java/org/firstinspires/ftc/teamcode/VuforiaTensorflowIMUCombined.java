@@ -1,12 +1,6 @@
 package org.firstinspires.ftc.teamcode;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import java.util.List;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -17,6 +11,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +23,8 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XZY;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 
 
-
-@Autonomous(name="VuforiaTensorflowCombined", group="linearOpMode")
-public class VuforiaTensorflowCombined extends AutonomousPrime2021 {
+@Autonomous(name="VuforiaTensorflowIMUCombined", group="linearOpMode")
+public class VuforiaTensorflowIMUCombined extends AutonomousPrime2021 {
 
     /*
      ***********************
@@ -68,6 +63,8 @@ public class VuforiaTensorflowCombined extends AutonomousPrime2021 {
     private boolean targetVisible       = false;
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
+    private double angle = 0;
+
 
     @Override
     public void runOpMode(){
@@ -84,8 +81,13 @@ public class VuforiaTensorflowCombined extends AutonomousPrime2021 {
         while(!isStopRequested()){
             vuforiaTrack();
             tfodTrack();
-
+            telemetry.addData("IMU Readout: ", getAngleOffset(angle));
             telemetry.update();
+            pause(2);
+            leftEncoder(40, 1);
+
+
+
         }
 
 
@@ -175,6 +177,7 @@ public class VuforiaTensorflowCombined extends AutonomousPrime2021 {
             // express the rotation of the robot in degrees.
             Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
             telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle + 180);
+            angle = rotation.thirdAngle + 180;
         }
         else {
             telemetry.addData("Visible Target", "none");

@@ -51,6 +51,16 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 public class AutonomousPrime2021 extends LinearOpMode {
 
     /*
+     ********************************
+     *   SETUP POSITION VARIABLES   *
+     ********************************
+     */
+    public int x = 0;
+    public int y = 0;
+    public int angle = 0;
+
+
+    /*
      ***************************
      *   SETUP WRITE TO FILE   *
      ***************************
@@ -95,6 +105,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
      * Mapping all empty objects to control hub objects
      */
     public void mapObjects(){
+
         /*
          ************************
          *   TELEMETRY READOUT  *
@@ -242,7 +253,44 @@ public class AutonomousPrime2021 extends LinearOpMode {
             deltaAngle -= 360;
         globalAngle += deltaAngle;
         lastAngles = angles;
-        return globalAngle;
+        if(globalAngle>=360){
+            globalAngle -= 360;
+            return globalAngle;
+        }
+        else if (globalAngle<=0){
+            globalAngle += 360;
+            return globalAngle;
+        }
+        else{
+            return globalAngle;
+        }
+
+    }
+
+    /**
+     * Get angle readout from IMU + a passed offset value
+     */
+    public double getAngleOffset(double offset){
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+        if (deltaAngle < -180)
+            deltaAngle += 360;
+        else if (deltaAngle > 180)
+            deltaAngle -= 360;
+        globalAngle += deltaAngle;
+        lastAngles = angles;
+        if(globalAngle + offset >=360){
+            globalAngle -= 360;
+            return globalAngle + offset;
+        }
+        else if (globalAngle + offset <=0){
+            globalAngle += 360;
+            return globalAngle + offset;
+        }
+        else{
+            return globalAngle + offset;
+        }
+
     }
 
     /**
