@@ -125,8 +125,8 @@ public class AutonomousPrime2021 extends LinearOpMode {
         backRight=hardwareMap.get(DcMotorEx.class,"backRight");
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
-        backLeft.setDirection(DcMotor.Direction.REVERSE);
-        backRight.setDirection(DcMotor.Direction.FORWARD);
+        backLeft.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
 
         /*
          ****************
