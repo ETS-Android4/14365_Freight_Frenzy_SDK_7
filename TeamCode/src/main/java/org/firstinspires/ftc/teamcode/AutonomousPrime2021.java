@@ -86,7 +86,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
     protected DcMotorEx backRight = null;
     protected double MotorPower = 1.0;
 
-    protected final double  COUNT_PER_ROTATION = 537.6;
+    protected final double  COUNT_PER_ROTATION = 26.9;
     protected final double  COUNT_PER_DEGREE = 0.07205357141;
 
     /*
@@ -325,7 +325,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
         frontRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
         backRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
 
-        double cmOffset = pos/25;
+        double cmOffset = pos;
 
         frontLeft.setTargetPosition((int)(cmOffset* COUNT_PER_ROTATION));
         frontRight.setTargetPosition((int)(cmOffset* COUNT_PER_ROTATION));
@@ -360,7 +360,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
         frontRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
         backRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
 
-        double cmOffset = pos/25;
+        double cmOffset = pos;
 
         frontLeft.setTargetPosition((int)(-cmOffset* COUNT_PER_ROTATION));
         frontRight.setTargetPosition((int)(-cmOffset* COUNT_PER_ROTATION));

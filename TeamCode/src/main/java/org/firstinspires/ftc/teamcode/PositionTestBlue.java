@@ -11,12 +11,11 @@ public class PositionTestBlue extends AutonomousPrime2021 {
         mapObjects();
         waitForStart();
 
-        while(!isStopRequested()){
             //telemetry.addData("IMU Readout: ", getAngleOffset(90));
             //telemetry.update();
-            forwardEncoder(10, 0.1);
-            pause(2);
-        }
+            forwardEncoder(20, 0.25);
+            pause(4);
+            reverseEncoder(20, 0.25);
 
 
         //hi logan -Jacob
