@@ -86,7 +86,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
     protected DcMotorEx backRight = null;
     protected double MotorPower = 1.0;
 
-    protected final double  COUNT_PER_ROTATION = 26.9;
+    protected final double  COUNT_PER_ROTATION = 30.5;
     protected final double  COUNT_PER_DEGREE = 0.07205357141;
 
     /*
@@ -125,8 +125,8 @@ public class AutonomousPrime2021 extends LinearOpMode {
         backRight=hardwareMap.get(DcMotorEx.class,"backRight");
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
-        backLeft.setDirection(DcMotor.Direction.FORWARD);
-        backRight.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
+        backRight.setDirection(DcMotor.Direction.FORWARD);
 
         /*
          ****************
