@@ -90,6 +90,25 @@ public class AutonomousPrime2021 extends LinearOpMode {
     protected final double  COUNT_PER_DEGREE = 0.07205357141;
 
     /*
+     *************************
+     *   SETUP MISC MOTORS   *
+     *************************
+     */
+
+    protected DcMotorEx duckSpinny = null;
+    protected DcMotorEx intake = null;
+
+    /*
+     ********************
+     *   SETUP SERVOS   *
+     ********************
+     */
+
+    protected Servo intakeDropLeft;
+    protected Servo intakeDropRight;
+
+
+    /*
      *****************
      *   SETUP IMU   *
      *****************
@@ -111,6 +130,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
          *   TELEMETRY READOUT  *
          ************************
          */
+
         telemetry.addData("Status","Initialized");
         telemetry.update();
 
@@ -119,6 +139,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
          *   MAP MOTORS  *
          *****************
          */
+
         frontLeft=hardwareMap.get(DcMotorEx.class,"frontLeft");
         frontRight=hardwareMap.get(DcMotorEx.class,"frontRight");
         backLeft=hardwareMap.get(DcMotorEx.class,"backLeft");
@@ -127,6 +148,20 @@ public class AutonomousPrime2021 extends LinearOpMode {
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
+
+        duckSpinny=hardwareMap.get(DcMotorEx.class,"duckSpinny");
+        duckSpinny.setDirection(DcMotor.Direction.FORWARD);
+
+        intake = hardwareMap.get(DcMotorEx.class, "intake");
+
+        /*
+         *****************
+         *   MAP SERVOS  *
+         *****************
+         */
+
+        intakeDropLeft = hardwareMap.get(Servo.class, "intakeDropLeft");
+        intakeDropRight = hardwareMap.get(Servo.class, "intakeDropRight");
 
         /*
          ****************
@@ -182,6 +217,40 @@ public class AutonomousPrime2021 extends LinearOpMode {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Spin duck for seconds
+     */
+    public void duckSpin(double seconds, double MotorPower){
+        duckSpinny.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        duckSpinny.setPower(MotorPower);
+        pause(seconds);
+        duckSpinny.setPower(0);
+    }
+
+    /**
+     * Drop intake device
+     */
+    public void dropIntake(double position){
+        intakeDropLeft.setPosition(position);
+        intakeDropRight.setPosition(position);
+    }
+
+    /**
+     * Spin intake
+     */
+    public void spinIntake(double MotorPower){
+        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intake.setPower(MotorPower);
+    }
+
+    /**
+     * Stop spinning intake
+     */
+    public void stopSpinIntake(){
+        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intake.setPower(0);
     }
 
     /**
@@ -394,7 +463,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
         frontRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
         backRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
 
-        double cmOffset = pos/25;
+        double cmOffset = pos;
 
         frontLeft.setTargetPosition((int)(-cmOffset* COUNT_PER_ROTATION));
         frontRight.setTargetPosition((int)(cmOffset* COUNT_PER_ROTATION));
@@ -425,7 +494,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
         frontRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
         backRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
 
-        double cmOffset = pos/25;
+        double cmOffset = pos;
 
         frontLeft.setTargetPosition((int)(cmOffset* COUNT_PER_ROTATION));
         frontRight.setTargetPosition((int)(-cmOffset* COUNT_PER_ROTATION));
