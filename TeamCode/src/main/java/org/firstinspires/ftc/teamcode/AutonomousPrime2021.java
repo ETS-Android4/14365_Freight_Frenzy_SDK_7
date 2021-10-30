@@ -87,7 +87,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
     protected double MotorPower = 1.0;
 
     protected final double  COUNT_PER_ROTATION = 30.5;
-    protected final double  COUNT_PER_DEGREE = 0.07205357141;
+    protected final double  COUNT_PER_DEGREE = 0.08;
 
     /*
      *************************
@@ -96,7 +96,11 @@ public class AutonomousPrime2021 extends LinearOpMode {
      */
 
     protected DcMotorEx duckSpinny = null;
-    protected DcMotorEx intake = null;
+
+
+    //protected DcMotorEx intake = null;
+
+
 
     /*
      ********************
@@ -104,8 +108,12 @@ public class AutonomousPrime2021 extends LinearOpMode {
      ********************
      */
 
-    protected Servo intakeDropLeft;
-    protected Servo intakeDropRight;
+
+
+    //protected Servo intakeDropLeft;
+    //protected Servo intakeDropRight;
+
+
 
 
     /*
@@ -152,7 +160,11 @@ public class AutonomousPrime2021 extends LinearOpMode {
         duckSpinny=hardwareMap.get(DcMotorEx.class,"duckSpinny");
         duckSpinny.setDirection(DcMotor.Direction.FORWARD);
 
-        intake = hardwareMap.get(DcMotorEx.class, "intake");
+
+
+        //intake = hardwareMap.get(DcMotorEx.class, "intake");
+
+
 
         /*
          *****************
@@ -160,8 +172,12 @@ public class AutonomousPrime2021 extends LinearOpMode {
          *****************
          */
 
-        intakeDropLeft = hardwareMap.get(Servo.class, "intakeDropLeft");
-        intakeDropRight = hardwareMap.get(Servo.class, "intakeDropRight");
+
+
+        //intakeDropLeft = hardwareMap.get(Servo.class, "intakeDropLeft");
+        //intakeDropRight = hardwareMap.get(Servo.class, "intakeDropRight");
+
+
 
         /*
          ****************
@@ -232,26 +248,36 @@ public class AutonomousPrime2021 extends LinearOpMode {
     /**
      * Drop intake device
      */
-    public void dropIntake(double position){
+
+
+    /*public void dropIntake(double position){
         intakeDropLeft.setPosition(position);
         intakeDropRight.setPosition(position);
-    }
+    }*/
+
+
 
     /**
      * Spin intake
      */
-    public void spinIntake(double MotorPower){
+
+
+    /*public void spinIntake(double MotorPower){
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intake.setPower(MotorPower);
-    }
+    }*/
 
     /**
      * Stop spinning intake
      */
-    public void stopSpinIntake(){
+
+
+    /*public void stopSpinIntake(){
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intake.setPower(0);
-    }
+    }*/
+
+
 
     /**
      * Update file with String line, then newline
