@@ -98,6 +98,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
     protected DcMotorEx duckSpinny = null;
 
 
+    //protected DcMotorEx chute = null;
     //protected DcMotorEx intake = null;
 
 
@@ -127,6 +128,32 @@ public class AutonomousPrime2021 extends LinearOpMode {
     protected Orientation lastAngles = new Orientation();
     protected double globalAngle;
     protected double initialAngle;
+
+    /*
+     ******************************
+     *   SETUP DISTANCE SENSORS   *
+     ******************************
+     */
+
+    protected DistanceSensor GroundFront;
+    protected double GroundFrontDist = 0;
+    protected DistanceSensor GroundBack;
+    protected double GroundBackDist = 0;
+
+    protected DistanceSensor Left;
+    protected double LeftDist = 0;
+    protected DistanceSensor Right;
+    protected double RightDist = 0;
+
+    protected DistanceSensor FrontLeft;
+    protected double FrontLeftDist = 0;
+    protected DistanceSensor FrontRight;
+    protected double FrontRightDist = 0;
+
+    protected DistanceSensor BackLeft;
+    protected double BackLeftDist = 0;
+    protected DistanceSensor BackRight;
+    protected double BackRightDist = 0;
 
     /**
      * Mapping all empty objects to control hub objects
@@ -163,6 +190,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
 
 
         //intake = hardwareMap.get(DcMotorEx.class, "intake");
+        //chute = hardwareMap.get(DcMotorEx.class, "chute");
 
 
 
@@ -177,6 +205,39 @@ public class AutonomousPrime2021 extends LinearOpMode {
         //intakeDropLeft = hardwareMap.get(Servo.class, "intakeDropLeft");
         //intakeDropRight = hardwareMap.get(Servo.class, "intakeDropRight");
 
+
+
+        /*
+         ***************************
+         *   MAP DISTANCE SENSORS  *
+         ***************************
+         */
+
+        //GroundFront, GroundBack, Left, Right, FrontLeft, FrontRight, BackLeft, BackRight
+
+        GroundFront=hardwareMap.get(DistanceSensor.class,"GroundFront");
+        GroundFrontDist=GroundFront.getDistance(DistanceUnit.CM);
+
+        GroundBack = hardwareMap.get(DistanceSensor.class, "GroundBack");
+        GroundBackDist = GroundBack.getDistance(DistanceUnit.CM);
+
+        Left = hardwareMap.get(DistanceSensor.class, "Left");
+        LeftDist = Left.getDistance(DistanceUnit.CM);
+
+        Right = hardwareMap.get(DistanceSensor.class, "Right");
+        RightDist = Right.getDistance(DistanceUnit.CM);
+
+        FrontLeft = hardwareMap.get(DistanceSensor.class, "FrontLeft");
+        FrontLeftDist = FrontLeft.getDistance(DistanceUnit.CM);
+
+        FrontRight = hardwareMap.get(DistanceSensor.class, "FrontRight");
+        FrontRightDist = FrontRight.getDistance(DistanceUnit.CM);
+
+        BackLeft = hardwareMap.get(DistanceSensor.class, "BackLeft");
+        BackLeftDist = BackLeft.getDistance(DistanceUnit.CM);
+
+        BackRight = hardwareMap.get(DistanceSensor.class, "BackLeft");
+        BackRightDist = BackRight.getDistance(DistanceUnit.CM);
 
 
         /*
@@ -246,6 +307,21 @@ public class AutonomousPrime2021 extends LinearOpMode {
     }
 
     /**
+     * Move chute conveyor
+     */
+
+
+
+    /*public void chute(double seconds, double MotorPower){
+        chute.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        chute.setPower(MotorPower);
+        pause(seconds);
+        chute.setPower(0);
+    }*/
+
+
+
+    /**
      * Drop intake device
      */
 
@@ -276,6 +352,99 @@ public class AutonomousPrime2021 extends LinearOpMode {
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intake.setPower(0);
     }*/
+
+
+    /**
+     * Update All Dist Sensor Values
+     */
+    public void updateAllDist(){
+        GroundFrontDist=GroundFront.getDistance(DistanceUnit.CM);
+        GroundBackDist = GroundBack.getDistance(DistanceUnit.CM);
+        LeftDist = Left.getDistance(DistanceUnit.CM);
+        RightDist = Right.getDistance(DistanceUnit.CM);
+        FrontLeftDist = FrontLeft.getDistance(DistanceUnit.CM);
+        FrontRightDist = FrontRight.getDistance(DistanceUnit.CM);
+        BackLeftDist = BackLeft.getDistance(DistanceUnit.CM);
+        BackRightDist = BackRight.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update All Side Sensor Values
+     */
+    public void updateSideDist(){
+        LeftDist = Left.getDistance(DistanceUnit.CM);
+        RightDist = Right.getDistance(DistanceUnit.CM);
+        FrontLeftDist = FrontLeft.getDistance(DistanceUnit.CM);
+        FrontRightDist = FrontRight.getDistance(DistanceUnit.CM);
+        BackLeftDist = BackLeft.getDistance(DistanceUnit.CM);
+        BackRightDist = BackRight.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update Left Sensor Value
+     */
+    public void updateLeftDist(){
+        LeftDist = Left.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update Right Sensor Value
+     */
+    public void updateRightDist(){
+        RightDist = Right.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update Front Sensor Values
+     */
+    public void updateFrontDist(){
+        FrontLeftDist = FrontLeft.getDistance(DistanceUnit.CM);
+        FrontRightDist = FrontRight.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update Back Sensor Values
+     */
+    public void updateBackDist(){
+        BackLeftDist = BackLeft.getDistance(DistanceUnit.CM);
+        BackRightDist = BackRight.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update Front Left Sensor Value
+     */
+    public void updateFrontLeftDist(){
+        FrontLeftDist = FrontLeft.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update Front Right Sensor Value
+     */
+    public void updateFrontRightDist(){
+        FrontRightDist = FrontRight.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update Back Left Sensor Value
+     */
+    public void updateBackLeftDist(){
+        BackLeftDist = BackLeft.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update Back Right Sensor Value
+     */
+    public void updateBackRightDist(){
+        BackRightDist = BackRight.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update Ground Sensor Values
+     */
+    public void updateGroundDist(){
+        GroundFrontDist=GroundFront.getDistance(DistanceUnit.CM);
+        GroundBackDist = GroundBack.getDistance(DistanceUnit.CM);
+    }
 
 
 
