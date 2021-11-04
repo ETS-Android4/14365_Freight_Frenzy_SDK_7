@@ -86,8 +86,36 @@ public class AutonomousPrime2021 extends LinearOpMode {
     protected DcMotorEx backRight = null;
     protected double MotorPower = 1.0;
 
-    protected final double  COUNT_PER_ROTATION = 537.6;
-    protected final double  COUNT_PER_DEGREE = 0.07205357141;
+    protected final double  COUNT_PER_ROTATION = 30.5;
+    protected final double  COUNT_PER_DEGREE = 0.08;
+
+    /*
+     *************************
+     *   SETUP MISC MOTORS   *
+     *************************
+     */
+
+    protected DcMotorEx duckSpinny = null;
+
+
+    //protected DcMotorEx chute = null;
+    //protected DcMotorEx intake = null;
+
+
+
+    /*
+     ********************
+     *   SETUP SERVOS   *
+     ********************
+     */
+
+
+
+    //protected Servo intakeDropLeft;
+    //protected Servo intakeDropRight;
+
+
+
 
     /*
      *****************
@@ -101,6 +129,32 @@ public class AutonomousPrime2021 extends LinearOpMode {
     protected double globalAngle;
     protected double initialAngle;
 
+    /*
+     ******************************
+     *   SETUP DISTANCE SENSORS   *
+     ******************************
+     */
+
+    protected DistanceSensor GroundFront;
+    protected double GroundFrontDist = 0;
+    protected DistanceSensor GroundBack;
+    protected double GroundBackDist = 0;
+
+    protected DistanceSensor Left;
+    protected double LeftDist = 0;
+    protected DistanceSensor Right;
+    protected double RightDist = 0;
+
+    protected DistanceSensor FrontLeft;
+    protected double FrontLeftDist = 0;
+    protected DistanceSensor FrontRight;
+    protected double FrontRightDist = 0;
+
+    protected DistanceSensor BackLeft;
+    protected double BackLeftDist = 0;
+    protected DistanceSensor BackRight;
+    protected double BackRightDist = 0;
+
     /**
      * Mapping all empty objects to control hub objects
      */
@@ -111,6 +165,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
          *   TELEMETRY READOUT  *
          ************************
          */
+
         telemetry.addData("Status","Initialized");
         telemetry.update();
 
@@ -119,6 +174,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
          *   MAP MOTORS  *
          *****************
          */
+
         frontLeft=hardwareMap.get(DcMotorEx.class,"frontLeft");
         frontRight=hardwareMap.get(DcMotorEx.class,"frontRight");
         backLeft=hardwareMap.get(DcMotorEx.class,"backLeft");
@@ -127,6 +183,62 @@ public class AutonomousPrime2021 extends LinearOpMode {
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
+
+        duckSpinny=hardwareMap.get(DcMotorEx.class,"duckSpinny");
+        duckSpinny.setDirection(DcMotor.Direction.FORWARD);
+
+
+
+        //intake = hardwareMap.get(DcMotorEx.class, "intake");
+        //chute = hardwareMap.get(DcMotorEx.class, "chute");
+
+
+
+        /*
+         *****************
+         *   MAP SERVOS  *
+         *****************
+         */
+
+
+
+        //intakeDropLeft = hardwareMap.get(Servo.class, "intakeDropLeft");
+        //intakeDropRight = hardwareMap.get(Servo.class, "intakeDropRight");
+
+
+
+        /*
+         ***************************
+         *   MAP DISTANCE SENSORS  *
+         ***************************
+         */
+
+        //GroundFront, GroundBack, Left, Right, FrontLeft, FrontRight, BackLeft, BackRight
+
+        GroundFront=hardwareMap.get(DistanceSensor.class,"GroundFront");
+        GroundFrontDist=GroundFront.getDistance(DistanceUnit.CM);
+
+        GroundBack = hardwareMap.get(DistanceSensor.class, "GroundBack");
+        GroundBackDist = GroundBack.getDistance(DistanceUnit.CM);
+
+        Left = hardwareMap.get(DistanceSensor.class, "Left");
+        LeftDist = Left.getDistance(DistanceUnit.CM);
+
+        Right = hardwareMap.get(DistanceSensor.class, "Right");
+        RightDist = Right.getDistance(DistanceUnit.CM);
+
+        FrontLeft = hardwareMap.get(DistanceSensor.class, "FrontLeft");
+        FrontLeftDist = FrontLeft.getDistance(DistanceUnit.CM);
+
+        FrontRight = hardwareMap.get(DistanceSensor.class, "FrontRight");
+        FrontRightDist = FrontRight.getDistance(DistanceUnit.CM);
+
+        BackLeft = hardwareMap.get(DistanceSensor.class, "BackLeft");
+        BackLeftDist = BackLeft.getDistance(DistanceUnit.CM);
+
+        BackRight = hardwareMap.get(DistanceSensor.class, "BackLeft");
+        BackRightDist = BackRight.getDistance(DistanceUnit.CM);
+
 
         /*
          ****************
@@ -183,6 +295,158 @@ public class AutonomousPrime2021 extends LinearOpMode {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Spin duck for seconds
+     */
+    public void duckSpin(double seconds, double MotorPower){
+        duckSpinny.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        duckSpinny.setPower(MotorPower);
+        pause(seconds);
+        duckSpinny.setPower(0);
+    }
+
+    /**
+     * Move chute conveyor
+     */
+
+
+
+    /*public void chute(double seconds, double MotorPower){
+        chute.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        chute.setPower(MotorPower);
+        pause(seconds);
+        chute.setPower(0);
+    }*/
+
+
+
+    /**
+     * Drop intake device
+     */
+
+
+    /*public void dropIntake(double position){
+        intakeDropLeft.setPosition(position);
+        intakeDropRight.setPosition(position);
+    }*/
+
+
+
+    /**
+     * Spin intake
+     */
+
+
+    /*public void spinIntake(double MotorPower){
+        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intake.setPower(MotorPower);
+    }*/
+
+    /**
+     * Stop spinning intake
+     */
+
+
+    /*public void stopSpinIntake(){
+        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intake.setPower(0);
+    }*/
+
+
+    /**
+     * Update All Dist Sensor Values
+     */
+    public void updateAllDist(){
+        GroundFrontDist=GroundFront.getDistance(DistanceUnit.CM);
+        GroundBackDist = GroundBack.getDistance(DistanceUnit.CM);
+        LeftDist = Left.getDistance(DistanceUnit.CM);
+        RightDist = Right.getDistance(DistanceUnit.CM);
+        FrontLeftDist = FrontLeft.getDistance(DistanceUnit.CM);
+        FrontRightDist = FrontRight.getDistance(DistanceUnit.CM);
+        BackLeftDist = BackLeft.getDistance(DistanceUnit.CM);
+        BackRightDist = BackRight.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update All Side Sensor Values
+     */
+    public void updateSideDist(){
+        LeftDist = Left.getDistance(DistanceUnit.CM);
+        RightDist = Right.getDistance(DistanceUnit.CM);
+        FrontLeftDist = FrontLeft.getDistance(DistanceUnit.CM);
+        FrontRightDist = FrontRight.getDistance(DistanceUnit.CM);
+        BackLeftDist = BackLeft.getDistance(DistanceUnit.CM);
+        BackRightDist = BackRight.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update Left Sensor Value
+     */
+    public void updateLeftDist(){
+        LeftDist = Left.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update Right Sensor Value
+     */
+    public void updateRightDist(){
+        RightDist = Right.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update Front Sensor Values
+     */
+    public void updateFrontDist(){
+        FrontLeftDist = FrontLeft.getDistance(DistanceUnit.CM);
+        FrontRightDist = FrontRight.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update Back Sensor Values
+     */
+    public void updateBackDist(){
+        BackLeftDist = BackLeft.getDistance(DistanceUnit.CM);
+        BackRightDist = BackRight.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update Front Left Sensor Value
+     */
+    public void updateFrontLeftDist(){
+        FrontLeftDist = FrontLeft.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update Front Right Sensor Value
+     */
+    public void updateFrontRightDist(){
+        FrontRightDist = FrontRight.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update Back Left Sensor Value
+     */
+    public void updateBackLeftDist(){
+        BackLeftDist = BackLeft.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update Back Right Sensor Value
+     */
+    public void updateBackRightDist(){
+        BackRightDist = BackRight.getDistance(DistanceUnit.CM);
+    }
+
+    /**
+     * Update Ground Sensor Values
+     */
+    public void updateGroundDist(){
+        GroundFrontDist=GroundFront.getDistance(DistanceUnit.CM);
+        GroundBackDist = GroundBack.getDistance(DistanceUnit.CM);
+    }
+
+
 
     /**
      * Update file with String line, then newline
@@ -325,7 +589,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
         frontRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
         backRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
 
-        double cmOffset = pos/25;
+        double cmOffset = pos;
 
         frontLeft.setTargetPosition((int)(cmOffset* COUNT_PER_ROTATION));
         frontRight.setTargetPosition((int)(cmOffset* COUNT_PER_ROTATION));
@@ -360,7 +624,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
         frontRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
         backRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
 
-        double cmOffset = pos/25;
+        double cmOffset = pos;
 
         frontLeft.setTargetPosition((int)(-cmOffset* COUNT_PER_ROTATION));
         frontRight.setTargetPosition((int)(-cmOffset* COUNT_PER_ROTATION));
@@ -394,7 +658,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
         frontRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
         backRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
 
-        double cmOffset = pos/25;
+        double cmOffset = pos;
 
         frontLeft.setTargetPosition((int)(-cmOffset* COUNT_PER_ROTATION));
         frontRight.setTargetPosition((int)(cmOffset* COUNT_PER_ROTATION));
@@ -425,7 +689,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
         frontRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
         backRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
 
-        double cmOffset = pos/25;
+        double cmOffset = pos;
 
         frontLeft.setTargetPosition((int)(cmOffset* COUNT_PER_ROTATION));
         frontRight.setTargetPosition((int)(-cmOffset* COUNT_PER_ROTATION));
