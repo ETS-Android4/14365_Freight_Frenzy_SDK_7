@@ -95,7 +95,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
      *************************
      */
 
-    protected DcMotorEx duckSpinny = null;
+   // protected DcMotorEx duckSpinny = null;
 
 
     //protected DcMotorEx chute = null;
@@ -135,7 +135,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
      ******************************
      */
 
-    protected DistanceSensor GroundFront;
+    /*protected DistanceSensor GroundFront;
     protected double GroundFrontDist = 0;
     protected DistanceSensor GroundBack;
     protected double GroundBackDist = 0;
@@ -153,7 +153,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
     protected DistanceSensor BackLeft;
     protected double BackLeftDist = 0;
     protected DistanceSensor BackRight;
-    protected double BackRightDist = 0;
+    protected double BackRightDist = 0;*/
 
     /**
      * Mapping all empty objects to control hub objects
@@ -184,8 +184,8 @@ public class AutonomousPrime2021 extends LinearOpMode {
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
 
-        duckSpinny=hardwareMap.get(DcMotorEx.class,"duckSpinny");
-        duckSpinny.setDirection(DcMotor.Direction.FORWARD);
+//        duckSpinny=hardwareMap.get(DcMotorEx.class,"duckSpinny");
+//        duckSpinny.setDirection(DcMotor.Direction.FORWARD);
 
 
 
@@ -215,7 +215,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
 
         //GroundFront, GroundBack, Left, Right, FrontLeft, FrontRight, BackLeft, BackRight
 
-        GroundFront=hardwareMap.get(DistanceSensor.class,"GroundFront");
+        /*GroundFront=hardwareMap.get(DistanceSensor.class,"GroundFront");
         GroundFrontDist=GroundFront.getDistance(DistanceUnit.CM);
 
         GroundBack = hardwareMap.get(DistanceSensor.class, "GroundBack");
@@ -237,7 +237,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
         BackLeftDist = BackLeft.getDistance(DistanceUnit.CM);
 
         BackRight = hardwareMap.get(DistanceSensor.class, "BackLeft");
-        BackRightDist = BackRight.getDistance(DistanceUnit.CM);
+        BackRightDist = BackRight.getDistance(DistanceUnit.CM);*/
 
 
         /*
@@ -299,12 +299,12 @@ public class AutonomousPrime2021 extends LinearOpMode {
     /**
      * Spin duck for seconds
      */
-    public void duckSpin(double seconds, double MotorPower){
-        duckSpinny.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        duckSpinny.setPower(MotorPower);
-        pause(seconds);
-        duckSpinny.setPower(0);
-    }
+//    public void duckSpin(double seconds, double MotorPower){
+//        duckSpinny.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        duckSpinny.setPower(MotorPower);
+//        pause(seconds);
+//        duckSpinny.setPower(0);
+//    }
 
     /**
      * Move chute conveyor
@@ -357,7 +357,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
     /**
      * Update All Dist Sensor Values
      */
-    public void updateAllDist(){
+    /*public void updateAllDist(){
         GroundFrontDist=GroundFront.getDistance(DistanceUnit.CM);
         GroundBackDist = GroundBack.getDistance(DistanceUnit.CM);
         LeftDist = Left.getDistance(DistanceUnit.CM);
@@ -371,7 +371,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
     /**
      * Update All Side Sensor Values
      */
-    public void updateSideDist(){
+    /*public void updateSideDist(){
         LeftDist = Left.getDistance(DistanceUnit.CM);
         RightDist = Right.getDistance(DistanceUnit.CM);
         FrontLeftDist = FrontLeft.getDistance(DistanceUnit.CM);
@@ -383,21 +383,21 @@ public class AutonomousPrime2021 extends LinearOpMode {
     /**
      * Update Left Sensor Value
      */
-    public void updateLeftDist(){
+    /*public void updateLeftDist(){
         LeftDist = Left.getDistance(DistanceUnit.CM);
     }
 
     /**
      * Update Right Sensor Value
      */
-    public void updateRightDist(){
+    /*public void updateRightDist(){
         RightDist = Right.getDistance(DistanceUnit.CM);
     }
 
     /**
      * Update Front Sensor Values
      */
-    public void updateFrontDist(){
+    /*public void updateFrontDist(){
         FrontLeftDist = FrontLeft.getDistance(DistanceUnit.CM);
         FrontRightDist = FrontRight.getDistance(DistanceUnit.CM);
     }
@@ -405,7 +405,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
     /**
      * Update Back Sensor Values
      */
-    public void updateBackDist(){
+    /*public void updateBackDist(){
         BackLeftDist = BackLeft.getDistance(DistanceUnit.CM);
         BackRightDist = BackRight.getDistance(DistanceUnit.CM);
     }
@@ -413,38 +413,38 @@ public class AutonomousPrime2021 extends LinearOpMode {
     /**
      * Update Front Left Sensor Value
      */
-    public void updateFrontLeftDist(){
+    /*public void updateFrontLeftDist(){
         FrontLeftDist = FrontLeft.getDistance(DistanceUnit.CM);
     }
 
     /**
      * Update Front Right Sensor Value
      */
-    public void updateFrontRightDist(){
+    /*public void updateFrontRightDist(){
         FrontRightDist = FrontRight.getDistance(DistanceUnit.CM);
     }
 
     /**
      * Update Back Left Sensor Value
      */
-    public void updateBackLeftDist(){
+    /*public void updateBackLeftDist(){
         BackLeftDist = BackLeft.getDistance(DistanceUnit.CM);
     }
 
     /**
      * Update Back Right Sensor Value
      */
-    public void updateBackRightDist(){
+    /*public void updateBackRightDist(){
         BackRightDist = BackRight.getDistance(DistanceUnit.CM);
     }
 
     /**
      * Update Ground Sensor Values
      */
-    public void updateGroundDist(){
+    /*public void updateGroundDist(){
         GroundFrontDist=GroundFront.getDistance(DistanceUnit.CM);
         GroundBackDist = GroundBack.getDistance(DistanceUnit.CM);
-    }
+    }*/
 
 
 

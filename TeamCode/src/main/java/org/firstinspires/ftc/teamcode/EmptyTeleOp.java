@@ -14,7 +14,7 @@ public class EmptyTeleOp extends LinearOpMode {
         DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
         DcMotor backRight = hardwareMap.dcMotor.get("backRight");
 
-        DcMotor duckSpinny = hardwareMap.dcMotor.get("duckSpinny");
+        //DcMotor duckSpinny = hardwareMap.dcMotor.get("duckSpinny");
 
         waitForStart();
 
@@ -36,11 +36,11 @@ public class EmptyTeleOp extends LinearOpMode {
             backLeft.setPower(backLeftPower);
             backRight.setPower(backRightPower);
 
-            if(gamepad1.left_trigger > 0.1) {
+            /*if(gamepad1.left_trigger > 0.1) {
                 duckSpinny.setPower(1);
             } else {
                 duckSpinny.setPower(0);
-            }
+            }*/
         }
     }
 }
