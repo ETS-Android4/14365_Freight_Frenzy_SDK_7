@@ -125,9 +125,9 @@ public class AutonomousPrime2021 extends LinearOpMode {
 
     protected BNO055IMU imu;
     protected BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-    protected Orientation lastAngles = new Orientation();
     protected double globalAngle;
     protected double initialAngle;
+    protected Orientation angles = new Orientation();
 
     /*
      ******************************
@@ -245,6 +245,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
          *   IMU SETUP  *
          ****************
          */
+
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.mode                = BNO055IMU.SensorMode.IMU;
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
@@ -256,7 +257,6 @@ public class AutonomousPrime2021 extends LinearOpMode {
             sleep(50);
             idle();
         }
-        initialAngle = getAngle();
 
     }
 
@@ -506,9 +506,24 @@ public class AutonomousPrime2021 extends LinearOpMode {
     }
 
     /**
-     * Get angle readout from IMU
+     * Get heading readout from IMU
      */
-    public double getAngle(){
+    public void getAngle(){
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        telemetry.addData("Initial Relative Heading: ", angles.firstAngle);
+        double cleanedUpAngle = 0;
+
+        if(angles.firstAngle<0){
+            cleanedUpAngle=angles.firstAngle+=360;
+        }
+        else{
+            cleanedUpAngle=angles.firstAngle;
+        }
+        telemetry.addData("Cleaned Up Relative Heading: ", cleanedUpAngle);
+        telemetry.update();
+    }
+
+    /*public double getAngle(){
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
         if (deltaAngle < -180)
@@ -529,12 +544,30 @@ public class AutonomousPrime2021 extends LinearOpMode {
             return globalAngle;
         }
 
-    }
+    }*/
 
     /**
      * Get angle readout from IMU + a passed offset value
      */
-    public double getAngleOffset(double offset){
+    public double getAngleOffset(double angle){
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        telemetry.addData("Initial Relative Heading: ", angles.firstAngle);
+        double cleanedUpAngle = 0;
+
+        cleanedUpAngle = angle + angles.firstAngle;
+
+        if(cleanedUpAngle<0){
+            cleanedUpAngle=cleanedUpAngle+=360;
+        }
+        else if(cleanedUpAngle>=360){
+            cleanedUpAngle=cleanedUpAngle-=360;
+        }
+        telemetry.addData("Cleaned Up Relative Heading: ", cleanedUpAngle);
+        return(cleanedUpAngle);
+    }
+
+
+    /*public double getAngleOffset(double offset){
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
         if (deltaAngle < -180)
@@ -555,12 +588,12 @@ public class AutonomousPrime2021 extends LinearOpMode {
             return globalAngle + offset;
         }
 
-    }
+    }*/
 
     /**
      * Zero Bot to "initial angle" using IMU angle readout
      */
-    public void zeroBotEncoder(double MotorPower){
+    /*public void zeroBotEncoder(double MotorPower){
         double newAngle = getAngle();
         telemetry.addData("zeroBot Initial ",initialAngle);
         telemetry.addData("New ",newAngle);
@@ -578,7 +611,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
                 leftEncoder(Math.abs(newAngle - initialAngle),MotorPower);
             }
         }
-    }
+    }*/
 
     /**
      * Move robot forwards by cm

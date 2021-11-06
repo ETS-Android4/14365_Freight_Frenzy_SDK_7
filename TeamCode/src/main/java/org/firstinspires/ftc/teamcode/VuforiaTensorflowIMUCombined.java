@@ -80,11 +80,13 @@ public class VuforiaTensorflowIMUCombined extends AutonomousPrime2021 {
 
         while(!isStopRequested()){
             vuforiaTrack();
-            tfodTrack();
+            pause(1);
             telemetry.addData("IMU Readout: ", getAngleOffset(angle));
             telemetry.update();
-            pause(2);
-            leftEncoder(40, 1);
+            tfodTrack();
+            pause(1);
+            leftEncoder(40, 0.15);
+            pause(1);
 
 
 
