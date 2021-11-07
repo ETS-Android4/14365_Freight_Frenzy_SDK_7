@@ -11,7 +11,7 @@ import java.util.List;
 // TODO: Get working with custom .TFLITE models (LONG TERM)
 
 @Autonomous(name="ComputerVisionTest", group="linearOpMode")
-public class ComputerVisionTest extends AutonomousPrime2020 {
+public class ComputerVisionTest extends AutonomousPrime2021 {
     private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
     private static final String[] LABELS = {
             "Ball",
