@@ -130,6 +130,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
     protected double globalAngle;
     protected double initialAngle;
     protected Orientation angles = new Orientation();
+    double cleanedUpAngle = 0;
 
     /*
      ******************************
@@ -559,7 +560,6 @@ public class AutonomousPrime2021 extends LinearOpMode {
     public double getAngleOffset(double angle){
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         telemetry.addData("Initial Relative Heading: ", angles.firstAngle);
-        double cleanedUpAngle = 0;
 
         cleanedUpAngle = angle + angles.firstAngle;
 
@@ -571,6 +571,24 @@ public class AutonomousPrime2021 extends LinearOpMode {
         }
         telemetry.addData("Cleaned Up Relative Heading: ", cleanedUpAngle);
         return(cleanedUpAngle);
+    }
+
+    /**
+     * Turn robot to set angle based off current angle;
+     * Takes angleGoal, your universal angle you want to face, angleOffset, or a value determined by some other position tracking device to tell your angle, and MotorPower
+     * STILL NEEDS EXTENSIVE TESTING TO BE READY FOR USE.
+     */
+    public void zeroBotEncoder(double angleGoal, double angleOffset, double MotorPower){
+        getAngleOffset(angleOffset); //Is there a better way to do this? Ask.
+        double angleDiff = angleGoal-cleanedUpAngle;
+        //May need to change some of these values
+        if(angleDiff>180){
+            angleDiff=angleDiff-180;
+            leftEncoder(angleDiff, 0.5);
+        }
+        else{
+            rightEncoder(angleDiff, 0.5);
+        }
     }
 
 

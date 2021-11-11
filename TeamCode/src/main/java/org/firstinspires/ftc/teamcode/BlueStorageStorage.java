@@ -71,6 +71,9 @@ public class BlueStorageStorage extends AutonomousPrime2021 {
     private boolean targetVisible       = false;
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
+    double VufXPos = 0;
+    double VufYPos = 0;
+
 
     @Override
     public void runOpMode(){
@@ -133,9 +136,17 @@ public class BlueStorageStorage extends AutonomousPrime2021 {
             strafeLeftEncoder(85, 0.5);
             pause(3);
         }
-        //call function that aligns the robot in the box
 
+        //Align the robot in the box
         strafeRightEncoder(100, 0.5);
+
+        /* SAMPLE CONCEPT: NEEDS PROPER TESTING ON ROBOT.
+        vuforiaTrack();
+        int ParkXPos = 0; //Update with position soon
+        strafeRightEncoder(VufXPos-ParkXPos, 0.5);
+        int ParkXPos = 0; //Update with position soon
+        strafeRightEncoder(VufXPos-ParkYPos, 0.5);
+        */
 
 
 
@@ -225,6 +236,8 @@ public class BlueStorageStorage extends AutonomousPrime2021 {
             VectorF translation = lastLocation.getTranslation();
             telemetry.addData("Pos (inches)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                     translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+            VufXPos=translation.get(0) / mmPerInch;
+            VufYPos=translation.get(2) / mmPerInch;
 
             // express the rotation of the robot in degrees.
             Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
