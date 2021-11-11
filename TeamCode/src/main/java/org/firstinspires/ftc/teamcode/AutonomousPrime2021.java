@@ -86,8 +86,10 @@ public class AutonomousPrime2021 extends LinearOpMode {
     protected DcMotorEx backRight = null;
     protected double MotorPower = 1.0;
 
-    protected final double  COUNT_PER_ROTATION = 30.5;
-    protected final double  COUNT_PER_DEGREE = 0.08;
+    protected final double  COUNT_PER_ROTATION = 15.641025641;
+    protected final double  COUNT_PER_DEGREE = 0.16;
+
+
 
     /*
      *************************
@@ -95,7 +97,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
      *************************
      */
 
-    protected DcMotorEx duckSpinny = null;
+   // protected DcMotorEx duckSpinny = null;
 
 
     //protected DcMotorEx chute = null;
@@ -125,9 +127,9 @@ public class AutonomousPrime2021 extends LinearOpMode {
 
     protected BNO055IMU imu;
     protected BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-    protected Orientation lastAngles = new Orientation();
     protected double globalAngle;
     protected double initialAngle;
+    protected Orientation angles = new Orientation();
 
     /*
      ******************************
@@ -135,7 +137,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
      ******************************
      */
 
-    protected DistanceSensor GroundFront;
+    /*protected DistanceSensor GroundFront;
     protected double GroundFrontDist = 0;
     protected DistanceSensor GroundBack;
     protected double GroundBackDist = 0;
@@ -153,7 +155,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
     protected DistanceSensor BackLeft;
     protected double BackLeftDist = 0;
     protected DistanceSensor BackRight;
-    protected double BackRightDist = 0;
+    protected double BackRightDist = 0;*/
 
     /**
      * Mapping all empty objects to control hub objects
@@ -184,8 +186,13 @@ public class AutonomousPrime2021 extends LinearOpMode {
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
 
-        duckSpinny=hardwareMap.get(DcMotorEx.class,"duckSpinny");
-        duckSpinny.setDirection(DcMotor.Direction.FORWARD);
+        frontLeft.setTargetPositionTolerance(31);
+        backLeft.setTargetPositionTolerance(31);
+        frontRight.setTargetPositionTolerance(31);
+        backRight.setTargetPositionTolerance(31);
+
+//        duckSpinny=hardwareMap.get(DcMotorEx.class,"duckSpinny");
+//        duckSpinny.setDirection(DcMotor.Direction.FORWARD);
 
 
 
@@ -215,7 +222,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
 
         //GroundFront, GroundBack, Left, Right, FrontLeft, FrontRight, BackLeft, BackRight
 
-        GroundFront=hardwareMap.get(DistanceSensor.class,"GroundFront");
+        /*GroundFront=hardwareMap.get(DistanceSensor.class,"GroundFront");
         GroundFrontDist=GroundFront.getDistance(DistanceUnit.CM);
 
         GroundBack = hardwareMap.get(DistanceSensor.class, "GroundBack");
@@ -237,7 +244,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
         BackLeftDist = BackLeft.getDistance(DistanceUnit.CM);
 
         BackRight = hardwareMap.get(DistanceSensor.class, "BackLeft");
-        BackRightDist = BackRight.getDistance(DistanceUnit.CM);
+        BackRightDist = BackRight.getDistance(DistanceUnit.CM);*/
 
 
         /*
@@ -245,6 +252,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
          *   IMU SETUP  *
          ****************
          */
+
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.mode                = BNO055IMU.SensorMode.IMU;
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
@@ -256,7 +264,6 @@ public class AutonomousPrime2021 extends LinearOpMode {
             sleep(50);
             idle();
         }
-        initialAngle = getAngle();
 
     }
 
@@ -299,12 +306,12 @@ public class AutonomousPrime2021 extends LinearOpMode {
     /**
      * Spin duck for seconds
      */
-    public void duckSpin(double seconds, double MotorPower){
-        duckSpinny.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        duckSpinny.setPower(MotorPower);
-        pause(seconds);
-        duckSpinny.setPower(0);
-    }
+//    public void duckSpin(double seconds, double MotorPower){
+//        duckSpinny.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        duckSpinny.setPower(MotorPower);
+//        pause(seconds);
+//        duckSpinny.setPower(0);
+//    }
 
     /**
      * Move chute conveyor
@@ -357,7 +364,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
     /**
      * Update All Dist Sensor Values
      */
-    public void updateAllDist(){
+    /*public void updateAllDist(){
         GroundFrontDist=GroundFront.getDistance(DistanceUnit.CM);
         GroundBackDist = GroundBack.getDistance(DistanceUnit.CM);
         LeftDist = Left.getDistance(DistanceUnit.CM);
@@ -371,7 +378,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
     /**
      * Update All Side Sensor Values
      */
-    public void updateSideDist(){
+    /*public void updateSideDist(){
         LeftDist = Left.getDistance(DistanceUnit.CM);
         RightDist = Right.getDistance(DistanceUnit.CM);
         FrontLeftDist = FrontLeft.getDistance(DistanceUnit.CM);
@@ -383,21 +390,21 @@ public class AutonomousPrime2021 extends LinearOpMode {
     /**
      * Update Left Sensor Value
      */
-    public void updateLeftDist(){
+    /*public void updateLeftDist(){
         LeftDist = Left.getDistance(DistanceUnit.CM);
     }
 
     /**
      * Update Right Sensor Value
      */
-    public void updateRightDist(){
+    /*public void updateRightDist(){
         RightDist = Right.getDistance(DistanceUnit.CM);
     }
 
     /**
      * Update Front Sensor Values
      */
-    public void updateFrontDist(){
+    /*public void updateFrontDist(){
         FrontLeftDist = FrontLeft.getDistance(DistanceUnit.CM);
         FrontRightDist = FrontRight.getDistance(DistanceUnit.CM);
     }
@@ -405,7 +412,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
     /**
      * Update Back Sensor Values
      */
-    public void updateBackDist(){
+    /*public void updateBackDist(){
         BackLeftDist = BackLeft.getDistance(DistanceUnit.CM);
         BackRightDist = BackRight.getDistance(DistanceUnit.CM);
     }
@@ -413,38 +420,38 @@ public class AutonomousPrime2021 extends LinearOpMode {
     /**
      * Update Front Left Sensor Value
      */
-    public void updateFrontLeftDist(){
+    /*public void updateFrontLeftDist(){
         FrontLeftDist = FrontLeft.getDistance(DistanceUnit.CM);
     }
 
     /**
      * Update Front Right Sensor Value
      */
-    public void updateFrontRightDist(){
+    /*public void updateFrontRightDist(){
         FrontRightDist = FrontRight.getDistance(DistanceUnit.CM);
     }
 
     /**
      * Update Back Left Sensor Value
      */
-    public void updateBackLeftDist(){
+    /*public void updateBackLeftDist(){
         BackLeftDist = BackLeft.getDistance(DistanceUnit.CM);
     }
 
     /**
      * Update Back Right Sensor Value
      */
-    public void updateBackRightDist(){
+    /*public void updateBackRightDist(){
         BackRightDist = BackRight.getDistance(DistanceUnit.CM);
     }
 
     /**
      * Update Ground Sensor Values
      */
-    public void updateGroundDist(){
+    /*public void updateGroundDist(){
         GroundFrontDist=GroundFront.getDistance(DistanceUnit.CM);
         GroundBackDist = GroundBack.getDistance(DistanceUnit.CM);
-    }
+    }*/
 
 
 
@@ -506,9 +513,24 @@ public class AutonomousPrime2021 extends LinearOpMode {
     }
 
     /**
-     * Get angle readout from IMU
+     * Get heading readout from IMU
      */
-    public double getAngle(){
+    public void getAngle(){
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        telemetry.addData("Initial Relative Heading: ", angles.firstAngle);
+        double cleanedUpAngle = 0;
+
+        if(angles.firstAngle<0){
+            cleanedUpAngle=angles.firstAngle+=360;
+        }
+        else{
+            cleanedUpAngle=angles.firstAngle;
+        }
+        telemetry.addData("Cleaned Up Relative Heading: ", cleanedUpAngle);
+        telemetry.update();
+    }
+
+    /*public double getAngle(){
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
         if (deltaAngle < -180)
@@ -529,12 +551,30 @@ public class AutonomousPrime2021 extends LinearOpMode {
             return globalAngle;
         }
 
-    }
+    }*/
 
     /**
      * Get angle readout from IMU + a passed offset value
      */
-    public double getAngleOffset(double offset){
+    public double getAngleOffset(double angle){
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        telemetry.addData("Initial Relative Heading: ", angles.firstAngle);
+        double cleanedUpAngle = 0;
+
+        cleanedUpAngle = angle + angles.firstAngle;
+
+        if(cleanedUpAngle<0){
+            cleanedUpAngle=cleanedUpAngle+=360;
+        }
+        else if(cleanedUpAngle>=360){
+            cleanedUpAngle=cleanedUpAngle-=360;
+        }
+        telemetry.addData("Cleaned Up Relative Heading: ", cleanedUpAngle);
+        return(cleanedUpAngle);
+    }
+
+
+    /*public double getAngleOffset(double offset){
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
         if (deltaAngle < -180)
@@ -555,12 +595,12 @@ public class AutonomousPrime2021 extends LinearOpMode {
             return globalAngle + offset;
         }
 
-    }
+    }*/
 
     /**
      * Zero Bot to "initial angle" using IMU angle readout
      */
-    public void zeroBotEncoder(double MotorPower){
+    /*public void zeroBotEncoder(double MotorPower){
         double newAngle = getAngle();
         telemetry.addData("zeroBot Initial ",initialAngle);
         telemetry.addData("New ",newAngle);
@@ -578,7 +618,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
                 leftEncoder(Math.abs(newAngle - initialAngle),MotorPower);
             }
         }
-    }
+    }*/
 
     /**
      * Move robot forwards by cm

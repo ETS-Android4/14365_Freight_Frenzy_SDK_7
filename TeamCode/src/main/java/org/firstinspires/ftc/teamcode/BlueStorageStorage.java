@@ -1,6 +1,12 @@
 package org.firstinspires.ftc.teamcode;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import java.util.List;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -11,8 +17,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +27,9 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XZY;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 
 
-@Autonomous(name="VuforiaTensorflowIMUCombined", group="linearOpMode")
-public class VuforiaTensorflowIMUCombined extends AutonomousPrime2021 {
+
+@Autonomous(name="BlueStorageStorage", group="linearOpMode")
+public class BlueStorageStorage extends AutonomousPrime2021 {
 
     /*
      ***********************
@@ -42,6 +47,9 @@ public class VuforiaTensorflowIMUCombined extends AutonomousPrime2021 {
     private static String labelName;
     private static int noLabel;
     private TFObjectDetector tfod;
+
+    double DuckRightPos = -1;
+    int DuckPosition = 0;
 
     /*
      ********************
@@ -63,8 +71,6 @@ public class VuforiaTensorflowIMUCombined extends AutonomousPrime2021 {
     private boolean targetVisible       = false;
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
-    private double angle = 0;
-
 
     @Override
     public void runOpMode(){
@@ -72,25 +78,69 @@ public class VuforiaTensorflowIMUCombined extends AutonomousPrime2021 {
         initVuforia();
         initTfod();
         tfod.activate();
+        tfodTrack();
 
         mapObjects();
         waitForStart();
 
 
 
-        while(!isStopRequested()){
-            vuforiaTrack();
-            pause(1);
-            telemetry.addData("IMU Readout: ", getAngleOffset(angle));
+        tfodTrack();
+
+        //Middle Pos
+        if(DuckRightPos>=164&&DuckRightPos<=364) {
+            DuckPosition=1;
+            telemetry.addData("Duck Position: ", DuckPosition);
             telemetry.update();
-            tfodTrack();
-            pause(1);
-            leftEncoder(40, 0.15);
-            pause(1);
-
-
-
         }
+        //Right Pos
+        else if(DuckRightPos>=463&&DuckRightPos<=663){
+            DuckPosition=2;
+            telemetry.addData("Duck Position: ", DuckPosition);
+            telemetry.update();
+        }
+        //Left Pos
+        else{
+            telemetry.addData("Duck Position: ", DuckPosition);
+            telemetry.update();
+        }
+
+        //Spin duck
+        reverseEncoder(46, 0.5);
+
+        pause(3);
+        strafeRightEncoder(15, 0.5);
+
+        rightEncoder(90, 0.5);
+
+        forwardEncoder(50, 0.5);
+
+        if(DuckPosition == 0) {
+            strafeLeftEncoder(45, 0.5);
+            //pick up capping elem
+            pause(3);
+            strafeLeftEncoder(40, 0.5);
+            pause(3);
+        } else if(DuckPosition == 1) {
+            strafeLeftEncoder(20, 0.5);
+            //pick up capping elem
+            pause(3);
+            strafeLeftEncoder(65, 0.5);
+            pause(3);
+        } else if(DuckPosition == 2){
+            //pick up capping elem, should already be right there
+            pause(3);
+            strafeLeftEncoder(85, 0.5);
+            pause(3);
+        }
+        //call function that aligns the robot in the box
+
+        strafeRightEncoder(100, 0.5);
+
+
+
+
+
 
 
     }
@@ -179,7 +229,6 @@ public class VuforiaTensorflowIMUCombined extends AutonomousPrime2021 {
             // express the rotation of the robot in degrees.
             Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
             telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle + 180);
-            angle = rotation.thirdAngle + 180;
         }
         else {
             telemetry.addData("Visible Target", "none");
@@ -200,6 +249,9 @@ public class VuforiaTensorflowIMUCombined extends AutonomousPrime2021 {
                     telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                             recognition.getRight(), recognition.getBottom());
                     labelName = recognition.getLabel();
+                    if(labelName.equals("Duck")){
+                        DuckRightPos=recognition.getRight();
+                    }
 
                 }
 

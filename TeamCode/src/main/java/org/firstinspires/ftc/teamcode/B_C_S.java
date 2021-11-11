@@ -20,7 +20,7 @@ public class B_C_S extends AutonomousPrime2021 {
 
         forwardEncoder(53, 0.75);
         pause(0.25);
-        duckSpin(5, 1);
+       // duckSpin(5, 1);
         //CarouselSpun = true;
         strafeLeftEncoder(10, 1);
         leftEncoder(90, 1);
