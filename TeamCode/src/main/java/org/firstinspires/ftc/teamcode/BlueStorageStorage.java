@@ -73,6 +73,7 @@ public class BlueStorageStorage extends AutonomousPrime2021 {
 
     double VufXPos = 0;
     double VufYPos = 0;
+    double VufHeading = 0;
 
 
     @Override
@@ -115,8 +116,10 @@ public class BlueStorageStorage extends AutonomousPrime2021 {
         strafeRightEncoder(15, 0.5);
 
         rightEncoder(90, 0.5);
+        pause(0.25);
 
         forwardEncoder(50, 0.5);
+        pause(0.25);
 
         if(DuckPosition == 0) {
             strafeLeftEncoder(45, 0.5);
@@ -137,16 +140,34 @@ public class BlueStorageStorage extends AutonomousPrime2021 {
             pause(3);
         }
 
-        //Align the robot in the box
-        strafeRightEncoder(100, 0.5);
-
-        /* SAMPLE CONCEPT: NEEDS PROPER TESTING ON ROBOT.
+        strafeRightEncoder(50, 0.5);
+        pause(1);
+        pause(0.5);
         vuforiaTrack();
-        int ParkXPos = 0; //Update with position soon
-        strafeRightEncoder(VufXPos-ParkXPos, 0.5);
-        int ParkXPos = 0; //Update with position soon
-        strafeRightEncoder(VufXPos-ParkYPos, 0.5);
-        */
+        telemetry.update();
+
+
+        if(targetVisible) {
+            if(VufHeading>=0&&VufHeading<180){
+                rightEncoder(VufHeading*1, 0.15);
+            }
+            else if (VufHeading>=180&&VufHeading<360){
+                leftEncoder((360-VufHeading*1), 0.15);
+            }
+
+            vuforiaTrack();
+
+            double ParkXPos = -50; //-62.9, then -60 (little change- positive?), then -55(little more change, within the square, positive), then -50 (perfect)
+            forwardEncoder(VufXPos - ParkXPos, 0.25);
+            double ParkYPos = 45; //Update with position goal 40.9, then 35
+            strafeLeftEncoder(VufYPos - ParkYPos, 0.25);
+        }
+        else{
+            strafeRightEncoder(50,0.5);
+        }
+
+
+
 
 
 
@@ -242,6 +263,7 @@ public class BlueStorageStorage extends AutonomousPrime2021 {
             // express the rotation of the robot in degrees.
             Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
             telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle + 180);
+            VufHeading = rotation.thirdAngle + 180;
         }
         else {
             telemetry.addData("Visible Target", "none");

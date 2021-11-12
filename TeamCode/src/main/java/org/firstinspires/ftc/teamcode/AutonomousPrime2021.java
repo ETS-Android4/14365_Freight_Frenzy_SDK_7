@@ -575,19 +575,19 @@ public class AutonomousPrime2021 extends LinearOpMode {
 
     /**
      * Turn robot to set angle based off current angle;
-     * Takes angleGoal, your universal angle you want to face, angleOffset, or a value determined by some other position tracking device to tell your angle, and MotorPower
+     * Takes angleGoal, your universal angle you want to face; angleOffset, or a value determined by some other position tracking device to tell your angle; and MotorPower
      * STILL NEEDS EXTENSIVE TESTING TO BE READY FOR USE.
      */
     public void zeroBotEncoder(double angleGoal, double angleOffset, double MotorPower){
-        getAngleOffset(angleOffset); //Is there a better way to do this? Ask.
+        getAngleOffset(angleOffset);
         double angleDiff = angleGoal-cleanedUpAngle;
         //May need to change some of these values
         if(angleDiff>180){
             angleDiff=angleDiff-180;
-            leftEncoder(angleDiff, 0.5);
+            leftEncoder(angleDiff, MotorPower);
         }
         else{
-            rightEncoder(angleDiff, 0.5);
+            rightEncoder(angleDiff, MotorPower);
         }
     }
 
