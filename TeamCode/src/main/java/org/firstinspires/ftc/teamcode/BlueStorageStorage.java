@@ -121,6 +121,10 @@ public class BlueStorageStorage extends AutonomousPrime2021 {
         forwardEncoder(50, 0.5);
         pause(0.25);
 
+
+        zeroBotEncoderOffset(-90, 0.25);
+
+
         if(DuckPosition == 0) {
             strafeLeftEncoder(45, 0.5);
             //pick up capping elem
@@ -142,7 +146,6 @@ public class BlueStorageStorage extends AutonomousPrime2021 {
 
         strafeRightEncoder(50, 0.5);
         pause(1);
-        pause(0.5);
         vuforiaTrack();
         telemetry.update();
 

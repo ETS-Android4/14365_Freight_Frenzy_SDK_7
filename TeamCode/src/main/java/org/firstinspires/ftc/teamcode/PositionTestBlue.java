@@ -11,11 +11,11 @@ public class PositionTestBlue extends AutonomousPrime2021 {
         mapObjects();
         waitForStart();
 
-        leftEncoder(90, 0.15);
-
-        pause(4);
-
-        rightEncoder(90, 0.15);
+        while(!isStopRequested()){
+            getAngle();
+            pause(4);
+            zeroBotEncoder(0.15);
+        }
 
         //hi logan -Jacob
         //What da dog doin? -Nate

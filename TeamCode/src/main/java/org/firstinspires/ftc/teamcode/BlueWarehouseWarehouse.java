@@ -23,8 +23,8 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XZY;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 
 
-@Autonomous(name="VuforiaTensorflowIMUCombined", group="linearOpMode")
-public class VuforiaTensorflowIMUCombined extends AutonomousPrime2021 {
+@Autonomous(name="BlueWarehouseWarehouse", group="linearOpMode")
+public class BlueWarehouseWarehouse extends AutonomousPrime2021 {
 
     /*
      ***********************
@@ -42,6 +42,9 @@ public class VuforiaTensorflowIMUCombined extends AutonomousPrime2021 {
     private static String labelName;
     private static int noLabel;
     private TFObjectDetector tfod;
+
+    double DuckRightPos = -1;
+    int DuckPosition = 0;
 
     /*
      ********************
@@ -63,9 +66,9 @@ public class VuforiaTensorflowIMUCombined extends AutonomousPrime2021 {
     private boolean targetVisible       = false;
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
-    private double angle = 0;
-
-    double angleOffset = 0;
+    double VufXPos = 0;
+    double VufYPos = 0;
+    double VufHeading = 0;
 
 
     @Override
@@ -74,29 +77,49 @@ public class VuforiaTensorflowIMUCombined extends AutonomousPrime2021 {
         initVuforia();
         initTfod();
         tfod.activate();
+        tfodTrack();
 
         mapObjects();
         waitForStart();
 
 
 
-        while(!isStopRequested()){
-            vuforiaTrack();
-            pause(1);
+        tfodTrack();
 
-            if(targetVisible){
-                angleOffset = angle - getAngle();
-            }
-            telemetry.addData("IMU Readout: ", getAngleOffset(angleOffset));
+        //Middle Pos
+        if(DuckRightPos>=164&&DuckRightPos<=364) {
+            DuckPosition=1;
+            telemetry.addData("Duck Position: ", DuckPosition);
             telemetry.update();
-            //tfodTrack();
-            pause(1);
-            //zeroBotEncoder(360,angleOffset, 0.15);
-            pause(1);
-
-
-
         }
+        //Right Pos
+        else if(DuckRightPos>=463&&DuckRightPos<=663){
+            DuckPosition=2;
+            telemetry.addData("Duck Position: ", DuckPosition);
+            telemetry.update();
+        }
+        //Left Pos
+        else{
+            telemetry.addData("Duck Position: ", DuckPosition);
+            telemetry.update();
+        }
+
+        strafeRightEncoder(70, 0.5);
+        zeroBotEncoder(0.5);
+        pause(0.5);
+        forwardEncoder(110, 0.5);
+
+        pause(0.5);
+        strafeRightEncoder(50, 0.5);
+        pause(0.5);
+        reverseTime(1.5, 0.15);
+//Initialize odometry for inside warehouse
+
+
+
+
+
+
 
 
     }
@@ -181,11 +204,13 @@ public class VuforiaTensorflowIMUCombined extends AutonomousPrime2021 {
             VectorF translation = lastLocation.getTranslation();
             telemetry.addData("Pos (inches)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                     translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+            VufXPos=translation.get(0) / mmPerInch;
+            VufYPos=translation.get(2) / mmPerInch;
 
             // express the rotation of the robot in degrees.
             Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
             telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle + 180);
-            angle = rotation.thirdAngle + 180;
+            VufHeading = rotation.thirdAngle + 180;
         }
         else {
             telemetry.addData("Visible Target", "none");
@@ -206,6 +231,9 @@ public class VuforiaTensorflowIMUCombined extends AutonomousPrime2021 {
                     telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                             recognition.getRight(), recognition.getBottom());
                     labelName = recognition.getLabel();
+                    if(labelName.equals("Duck")){
+                        DuckRightPos=recognition.getRight();
+                    }
 
                 }
 

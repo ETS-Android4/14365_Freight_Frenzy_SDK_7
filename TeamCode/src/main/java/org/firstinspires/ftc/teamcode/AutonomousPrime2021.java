@@ -59,7 +59,6 @@ public class AutonomousPrime2021 extends LinearOpMode {
     public int y = 0;
     public int angle = 0;
 
-
     /*
      ***************************
      *   SETUP WRITE TO FILE   *
@@ -132,6 +131,9 @@ public class AutonomousPrime2021 extends LinearOpMode {
     protected Orientation angles = new Orientation();
     double cleanedUpAngle = 0;
 
+    protected Orientation lastAngles = new Orientation();
+
+
     /*
      ******************************
      *   SETUP DISTANCE SENSORS   *
@@ -187,10 +189,10 @@ public class AutonomousPrime2021 extends LinearOpMode {
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
 
-        frontLeft.setTargetPositionTolerance(31);
-        backLeft.setTargetPositionTolerance(31);
-        frontRight.setTargetPositionTolerance(31);
-        backRight.setTargetPositionTolerance(31);
+        frontLeft.setTargetPositionTolerance(30);
+        backLeft.setTargetPositionTolerance(30);
+        frontRight.setTargetPositionTolerance(30);
+        backRight.setTargetPositionTolerance(30);
 
 //        duckSpinny=hardwareMap.get(DcMotorEx.class,"duckSpinny");
 //        duckSpinny.setDirection(DcMotor.Direction.FORWARD);
@@ -265,6 +267,8 @@ public class AutonomousPrime2021 extends LinearOpMode {
             sleep(50);
             idle();
         }
+        initialAngle = getAngle();
+
 
     }
 
@@ -516,7 +520,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
     /**
      * Get heading readout from IMU
      */
-    public void getAngle(){
+    public double getAngle(){
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         telemetry.addData("Initial Relative Heading: ", angles.firstAngle);
         double cleanedUpAngle = 0;
@@ -529,9 +533,10 @@ public class AutonomousPrime2021 extends LinearOpMode {
         }
         telemetry.addData("Cleaned Up Relative Heading: ", cleanedUpAngle);
         telemetry.update();
+        return cleanedUpAngle;
     }
 
-    /*public double getAngle(){
+    public double getAngleOld(){
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
         if (deltaAngle < -180)
@@ -552,7 +557,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
             return globalAngle;
         }
 
-    }*/
+    }
 
     /**
      * Get angle readout from IMU + a passed offset value
@@ -571,6 +576,8 @@ public class AutonomousPrime2021 extends LinearOpMode {
         }
         telemetry.addData("Cleaned Up Relative Heading: ", cleanedUpAngle);
         return(cleanedUpAngle);
+
+
     }
 
     /**
@@ -578,17 +585,32 @@ public class AutonomousPrime2021 extends LinearOpMode {
      * Takes angleGoal, your universal angle you want to face; angleOffset, or a value determined by some other position tracking device to tell your angle; and MotorPower
      * STILL NEEDS EXTENSIVE TESTING TO BE READY FOR USE.
      */
-    public void zeroBotEncoder(double angleGoal, double angleOffset, double MotorPower){
-        getAngleOffset(angleOffset);
-        double angleDiff = angleGoal-cleanedUpAngle;
-        //May need to change some of these values
-        if(angleDiff>180){
-            angleDiff=angleDiff-180;
-            leftEncoder(angleDiff, MotorPower);
+    public void zeroBotEncoderOffset(double angleGoal, double angleOffset, double MotorPower){
+
+    }
+
+    public void zeroBotEncoder(double MotorPower){
+        double newAngle = getAngle();
+        double deltaAngle = initialAngle-newAngle;
+        if(deltaAngle<=-180){
+            deltaAngle+=360;
         }
-        else{
-            rightEncoder(angleDiff, MotorPower);
+        else if(deltaAngle>180){
+            deltaAngle+=360;
         }
+        leftEncoder(deltaAngle,MotorPower);
+    }
+
+    public void zeroBotEncoderOffset(double AngleOffset, double MotorPower){
+        double newAngle = getAngle();
+        double deltaAngle = (initialAngle-newAngle)+AngleOffset;
+        if(deltaAngle<=-180){
+            deltaAngle+=360;
+        }
+        else if(deltaAngle>180){
+            deltaAngle+=360;
+        }
+        leftEncoder(deltaAngle,MotorPower);
     }
 
 
@@ -618,8 +640,8 @@ public class AutonomousPrime2021 extends LinearOpMode {
     /**
      * Zero Bot to "initial angle" using IMU angle readout
      */
-    /*public void zeroBotEncoder(double MotorPower){
-        double newAngle = getAngle();
+    public void oldZeroBot(double MotorPower){
+        double newAngle = getAngleOld();
         telemetry.addData("zeroBot Initial ",initialAngle);
         telemetry.addData("New ",newAngle);
         telemetry.addData("Diff ",Math.abs(newAngle - initialAngle));
@@ -627,16 +649,16 @@ public class AutonomousPrime2021 extends LinearOpMode {
         while (Math.abs(newAngle - initialAngle) > 3 && opModeIsActive()){ //was >5
             telemetry.addData("Zerobot Adj Initial ",initialAngle);
             telemetry.addData("New ",newAngle);
-            telemetry.addData("Diff ",Math.abs(newAngle - initialAngle));
+            telemetry.addData("Diff ", (newAngle - initialAngle));
             telemetry.update();
-            newAngle = getAngle();
-            if (newAngle > initialAngle ){
-                rightEncoder(Math.abs(newAngle - initialAngle),MotorPower);
+            newAngle = getAngleOld();
+            if (newAngle - initialAngle <=180 ){
+                rightEncoder(Math.abs(newAngle - initialAngle),MotorPower); //Works
             }else {
-                leftEncoder(Math.abs(newAngle - initialAngle),MotorPower);
+                leftEncoder((newAngle - initialAngle)-180,MotorPower); //Doesn't work
             }
         }
-    }*/
+    }
 
     /**
      * Move robot forwards by cm
@@ -826,6 +848,25 @@ public class AutonomousPrime2021 extends LinearOpMode {
 
         }
     }
+
+    public void reverseTime(double secs, double MotorPower){
+        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontLeft.setPower(-1 * MotorPower);
+        frontRight.setPower(-1 * MotorPower);
+        backLeft.setPower(-1 * MotorPower);
+        backRight.setPower(-1 * MotorPower);
+
+        pause(secs);
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
+    }
+
+
 
     /**
      * Pause for seconds passed
