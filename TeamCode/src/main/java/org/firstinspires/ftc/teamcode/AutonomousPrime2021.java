@@ -100,7 +100,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
 
 
     //protected DcMotorEx chute = null;
-    //protected DcMotorEx intake = null;
+    protected DcMotorEx intake = null;
 
 
 
@@ -199,7 +199,9 @@ public class AutonomousPrime2021 extends LinearOpMode {
 
 
 
-        //intake = hardwareMap.get(DcMotorEx.class, "intake");
+        intake = hardwareMap.get(DcMotorEx.class, "intake");
+        intake.setDirection(DcMotor.Direction.REVERSE);
+
         //chute = hardwareMap.get(DcMotorEx.class, "chute");
 
 
@@ -350,20 +352,20 @@ public class AutonomousPrime2021 extends LinearOpMode {
      */
 
 
-    /*public void spinIntake(double MotorPower){
+    public void spinIntake(double MotorPower){
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intake.setPower(MotorPower);
-    }*/
+    }
 
     /**
      * Stop spinning intake
      */
 
 
-    /*public void stopSpinIntake(){
+    public void stopSpinIntake(){
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intake.setPower(0);
-    }*/
+    }
 
 
     /**

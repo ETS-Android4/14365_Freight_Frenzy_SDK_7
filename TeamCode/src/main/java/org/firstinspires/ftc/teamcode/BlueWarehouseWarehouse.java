@@ -114,12 +114,55 @@ public class BlueWarehouseWarehouse extends AutonomousPrime2021 {
         pause(0.5);
         reverseTime(1.5, 0.15);
 //Initialize odometry for inside warehouse
+        leftEncoder(60, 0.5);
+        forwardEncoder(50, 0.5);
+        pause(0.5);
+        rightEncoder(45, 0.5);
+        pause(0.5);
+        strafeRightEncoder(15, 0.5);
+        reverseEncoder(120, 0.5);
+        pause(0.5);
+        rightEncoder(180, 0.5);
+        zeroBotEncoderOffset(180,0.5);
+
+
+        pause(1); //Was 0.5
+
+
+        //call vuforia function vuforiaTrack
+        vuforiaTrack();
+        telemetry.addData("Vuforia X Pos: ", VufXPos);
+        telemetry.addData("Vuforia Y Pos: ", VufYPos);
+        telemetry.addData("Vuforia Heading: ", VufHeading);
+        int idealXPos = 0; //Change This Value
+        int idealYPos = 0; //Change This Value
+        int idealHeading = 0; //Change This Value
+
+        /*if(targetVisible) {                       //NEEDS TESTING TO SEE HOW TO SET THE OFFSET OR IF ITS EVEN NECESSARY AT ALL
+            if(VufHeading>=0&&VufHeading<180){
+                rightEncoder(VufHeading, 0.15);
+            }
+            else if (VufHeading>=180&&VufHeading<360){
+                leftEncoder((360-VufHeading), 0.15);
+            }
+
+        }*/
+
+        vuforiaTrack();
+
+        if(targetVisible) {
+            vuforiaTrack();
+            forwardEncoder(VufXPos - idealXPos, 0.25);
+            strafeLeftEncoder(VufYPos - idealYPos, 0.25);
+        }
 
 
 
 
+        //forwardEncoder(70, 0.5);
 
 
+        //drop off cube
 
 
     }
