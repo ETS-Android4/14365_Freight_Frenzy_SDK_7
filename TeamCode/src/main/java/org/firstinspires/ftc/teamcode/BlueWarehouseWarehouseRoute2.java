@@ -23,8 +23,8 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XZY;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 
 
-@Autonomous(name="BlueWarehouseWarehouse", group="linearOpMode")
-public class BlueWarehouseWarehouse extends AutonomousPrime2021 {
+@Autonomous(name="BlueWarehouseWarehouseRoute2", group="linearOpMode")
+public class BlueWarehouseWarehouseRoute2 extends AutonomousPrime2021 {
 
     /*
      ***********************
@@ -104,32 +104,17 @@ public class BlueWarehouseWarehouse extends AutonomousPrime2021 {
             telemetry.update();
         }
 
-        strafeRightEncoder(70, 0.5);
-        zeroBotEncoder(0.5);
-        pause(0.5);
-        forwardEncoder(110, 0.5);
-
-        pause(0.5);
-        strafeRightEncoder(50, 0.5);
-        pause(0.5);
-        reverseTime(1.5, 0.15);
-//Initialize odometry for inside warehouse
-        leftEncoder(60, 0.5);
-        forwardEncoder(50, 0.5);
-        pause(0.5);
-        rightEncoder(45, 0.5);
-        pause(0.5);
-        strafeRightEncoder(15, 0.5);
-        reverseEncoder(130, 0.5);
-        pause(0.5);
+//******************************************
+//*             NEEDS TESTING              *
+//******************************************
+        reverseEncoder(140,0.5);
+        strafeRightEncoder(30, 0.5);
+        leftEncoder(180, 0.5);
+        //pick cube up
+        reverseEncoder(140, 0.5);
         rightEncoder(180, 0.5);
-        zeroBotEncoderOffset(180,0.5);
 
-
-        pause(1); //Was 0.5
-
-
-        //call vuforia function vuforiaTrack
+        //Get vuforia info
         vuforiaTrack();
         telemetry.addData("Vuforia X Pos: ", VufXPos);
         telemetry.addData("Vuforia Y Pos: ", VufYPos);
@@ -137,8 +122,13 @@ public class BlueWarehouseWarehouse extends AutonomousPrime2021 {
         int idealXPos = 0; //Change This Value
         int idealYPos = 0; //Change This Value
         int idealHeading = 0; //Change This Value
-
-        /*if(targetVisible) {                       //NEEDS TESTING TO SEE HOW TO SET THE OFFSET OR IF ITS EVEN NECESSARY AT ALL
+                                                        //Most of this is code Logan implemented in BlueWarehouseWarehouse, but I added the while(!targetVisible) in the unlikely the robot can't see it, most likely it will be too short not far
+        //Go over if targer isn't visible
+        while(!targetVisible) {
+            forwardEncoder(5, 0.5);
+            vuforiaTrack();
+        }
+           /*if(targetVisible) {                       //NEEDS TESTING TO SEE HOW TO SET THE OFFSET OR IF ITS EVEN NECESSARY AT ALL
             if(VufHeading>=0&&VufHeading<180){
                 rightEncoder(VufHeading, 0.15);
             }
@@ -147,26 +137,12 @@ public class BlueWarehouseWarehouse extends AutonomousPrime2021 {
             }
 
         }*/
-
         vuforiaTrack();
-        while(!targetVisible) {
-            forwardEncoder(5, 0.5);
-            vuforiaTrack();
-        }
         if(targetVisible) {
             vuforiaTrack();
-            forwardEncoder(VufXPos - idealXPos, 0.25); //Was forward encoder, but I think it would be going backwards, not forwards, I haven't tested this though
+            reverseEncoder(VufXPos - idealXPos, 0.25); //Was forward encoder, but I think it would be going backwards, not forwards, I haven't tested this though
             strafeLeftEncoder(VufYPos - idealYPos, 0.25);
         }
-
-
-
-
-        //forwardEncoder(70, 0.5);
-
-
-        //drop off cube
-
 
     }
 

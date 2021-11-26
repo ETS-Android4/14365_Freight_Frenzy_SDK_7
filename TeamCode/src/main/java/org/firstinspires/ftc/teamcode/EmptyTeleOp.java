@@ -13,6 +13,7 @@ public class EmptyTeleOp extends LinearOpMode {
         DcMotor backLeft = hardwareMap.dcMotor.get("backLeft");
         DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
         DcMotor backRight = hardwareMap.dcMotor.get("backRight");
+        DcMotor intake = hardwareMap.dcMotor.get("intake");
 
         //DcMotor duckSpinny = hardwareMap.dcMotor.get("duckSpinny");
 
@@ -21,8 +22,9 @@ public class EmptyTeleOp extends LinearOpMode {
         if(isStopRequested()) return;
 
         while(opModeIsActive()) {
-            double y = -gamepad1.left_stick_y;
-            double x = gamepad1.left_stick_x;
+            double coefficient = 1;
+            double y = gamepad1.left_stick_y;
+            double x = -gamepad1.left_stick_x;
             double rx = gamepad1.right_stick_x;
 
             double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
@@ -31,10 +33,25 @@ public class EmptyTeleOp extends LinearOpMode {
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
 
-            frontLeft.setPower(frontLeftPower);
-            frontRight.setPower(frontRightPower);
-            backLeft.setPower(backLeftPower);
-            backRight.setPower(backRightPower);
+            if(gamepad1.right_trigger > 0.1) {
+                coefficient = 0.5;
+            }
+
+            frontLeft.setPower(coefficient * frontLeftPower);
+            frontRight.setPower(coefficient * frontRightPower);
+            backLeft.setPower(coefficient * backLeftPower);
+            backRight.setPower(coefficient * backRightPower);
+
+            if(gamepad1.left_trigger > 0.1) {
+                intake.setPower(1);
+            } else if(gamepad1.left_trigger == 0) {
+                intake.setPower(0);
+            }
+            if(gamepad1.left_bumper) {
+                intake.setPower(-1);
+            } else if(!gamepad1.left_bumper) {
+                intake.setPower(0);
+            }
 
             /*if(gamepad1.left_trigger > 0.1) {
                 duckSpinny.setPower(1);
