@@ -99,7 +99,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
    // protected DcMotorEx duckSpinny = null;
 
 
-    //protected DcMotorEx chute = null;
+    protected DcMotorEx chute = null;
     protected DcMotorEx intake = null;
 
 
@@ -109,8 +109,6 @@ public class AutonomousPrime2021 extends LinearOpMode {
      *   SETUP SERVOS   *
      ********************
      */
-
-
 
     protected Servo intakeDrop;
 
@@ -201,7 +199,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
         intake = hardwareMap.get(DcMotorEx.class, "intake");
         intake.setDirection(DcMotor.Direction.REVERSE);
 
-        //chute = hardwareMap.get(DcMotorEx.class, "chute");
+        chute = hardwareMap.get(DcMotorEx.class, "chute");
 
 
 
@@ -322,49 +320,67 @@ public class AutonomousPrime2021 extends LinearOpMode {
      * Move chute conveyor
      */
 
+    public void chute(double pos, double MotorPower){
+        //chute.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        chute.setMode(DcMotor.RunMode.RESET_ENCODERS);
 
+        double cmOffset = pos;
 
-    /*public void chute(double seconds, double MotorPower){
+        chute.setTargetPosition((int)(cmOffset));
+
+        chute.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        chute.setPower(MotorPower);
+
+        while (opModeIsActive() && (chute.isBusy())){
+            telemetry.addData("Chute: ",chute.isBusy());
+            telemetry.update();
+        }
+    }
+
+    public void chuteTime(double secs, double MotorPower){
         chute.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         chute.setPower(MotorPower);
-        pause(seconds);
+
+        pause(secs);
         chute.setPower(0);
-    }*/
-
-
+    }
 
     /**
      * Drop intake device
      */
-
-
     public void dropIntake(double position){
         intakeDrop.setPosition(position);
     }
-
-
-
     /**
      * Spin intake
      */
-
-
     public void spinIntake(double MotorPower){
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intake.setPower(MotorPower);
     }
-
+    /**
+     * Get intake speed across seconds
+     */
+    public void speedOfIntake(double seconds){
+        int prevPosition = intake.getCurrentPosition();
+        ElapsedTime readTime = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
+        readTime.reset();
+        if(readTime.time()<=seconds){
+            double speed = (double) (intake.getCurrentPosition()-prevPosition)/readTime.time();
+            telemetry.addData("Speed: ", speed);
+            telemetry.update();
+            prevPosition = intake.getCurrentPosition();
+            timer.reset();
+        }
+    }
     /**
      * Stop spinning intake
      */
-
-
     public void stopSpinIntake(){
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intake.setPower(0);
     }
-
-
     /**
      * Update All Dist Sensor Values
      */

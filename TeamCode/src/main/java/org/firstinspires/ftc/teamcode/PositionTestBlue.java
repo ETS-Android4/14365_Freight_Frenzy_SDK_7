@@ -11,17 +11,8 @@ public class PositionTestBlue extends AutonomousPrime2021 {
         mapObjects();
         waitForStart();
 
-        while(!isStopRequested()){
-            updateAllDist();
-            telemetry.addData("GroundFront: ", GroundFrontDist);
-            telemetry.addData("GroundBack: ", GroundBackDist);
-            telemetry.addData("FrontLeft: ", FrontLeftDist);
-            telemetry.addData("FrontRight: ", FrontRightDist);
-            telemetry.addData("BackLeft: ", BackLeftDist);
-            telemetry.addData("BackRight: ", BackRightDist);
-            telemetry.addData("Left: ", LeftDist);
-            telemetry.addData("Right: ", RightDist);
-            telemetry.update();
+        while(!isStopRequested()) {
+            chute(5.5, 0.75);
         }
 
         //hi logan -Jacob
