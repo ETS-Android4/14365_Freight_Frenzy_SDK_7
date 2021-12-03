@@ -110,41 +110,58 @@ public class BlueStorageStorage extends AutonomousPrime2021 {
         }
 
         //Spin duck
-        reverseEncoder(46, 0.5);
 
-        pause(3);
-        strafeRightEncoder(15, 0.5);
+        strafeRightEncoder(22, 0.5);
+        rightEncoder(110,0.25);
 
-        rightEncoder(90, 0.5);
-        pause(0.25);
+        double idealWobblePos=17.4;
+        updateRightDist();
+        int count = 0;
+        while(RightDist==0 || RightDist>800){
+            updateBackRightDist();
+            telemetry.addData("Getting valid dist sensor ", "info");
+            telemetry.update();
+            count++;
+            if(count>25){
+                reverseEncoder(25,0.5);
+                count=0;
+            }
+        }
+        strafeRightEncoder(RightDist-idealWobblePos,0.25);
+        //reverseEncoder(46, 0.5);
 
-        forwardEncoder(50, 0.5);
-        pause(0.25);
+        duckSpin(3,1);
 
 
-        zeroBotEncoderOffset(-90, 0.25);
+        forwardEncoder(45,1);
+
+
+        zeroBotEncoderOffset(-200, 0.25); //Was 180, -200
+
+        spinIntake(1);
 
 
         if(DuckPosition == 0) {
-            strafeLeftEncoder(45, 0.5);
+            reverseEncoder(45, 0.5);
             //pick up capping elem
             pause(3);
-            strafeLeftEncoder(40, 0.5);
+            reverseEncoder(40, 0.5);
             pause(3);
         } else if(DuckPosition == 1) {
-            strafeLeftEncoder(20, 0.5);
+            reverseEncoder(20, 0.5);
             //pick up capping elem
             pause(3);
-            strafeLeftEncoder(65, 0.5);
+            reverseEncoder(65, 0.5);
             pause(3);
         } else if(DuckPosition == 2){
             //pick up capping elem, should already be right there
             pause(3);
-            strafeLeftEncoder(85, 0.5);
+            reverseEncoder(85, 0.5);
             pause(3);
         }
 
-        strafeRightEncoder(50, 0.5);
+        forwardEncoder(50, 0.5);
+        zeroBotEncoderOffset(-90,0.5);
         pause(1);
         vuforiaTrack();
         telemetry.update();

@@ -96,7 +96,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
      *************************
      */
 
-   // protected DcMotorEx duckSpinny = null;
+    protected DcMotorEx duckSpinny = null;
 
 
     protected DcMotorEx chute = null;
@@ -186,13 +186,13 @@ public class AutonomousPrime2021 extends LinearOpMode {
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
 
-        frontLeft.setTargetPositionTolerance(30);
-        backLeft.setTargetPositionTolerance(30);
-        frontRight.setTargetPositionTolerance(30);
-        backRight.setTargetPositionTolerance(30);
+        frontLeft.setTargetPositionTolerance(50);
+        backLeft.setTargetPositionTolerance(50);
+        frontRight.setTargetPositionTolerance(50);
+        backRight.setTargetPositionTolerance(50);
 
-//        duckSpinny=hardwareMap.get(DcMotorEx.class,"duckSpinny");
-//        duckSpinny.setDirection(DcMotor.Direction.FORWARD);
+        duckSpinny=hardwareMap.get(DcMotorEx.class,"duckSpinny");
+        duckSpinny.setDirection(DcMotor.Direction.FORWARD);
 
 
 
@@ -309,12 +309,12 @@ public class AutonomousPrime2021 extends LinearOpMode {
     /**
      * Spin duck for seconds
      */
-//    public void duckSpin(double seconds, double MotorPower){
-//        duckSpinny.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        duckSpinny.setPower(MotorPower);
-//        pause(seconds);
-//        duckSpinny.setPower(0);
-//    }
+    public void duckSpin(double seconds, double MotorPower){
+        duckSpinny.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        duckSpinny.setPower(MotorPower);
+        pause(seconds);
+        duckSpinny.setPower(0);
+    }
 
     /**
      * Move chute conveyor
@@ -322,7 +322,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
 
     public void chute(double pos, double MotorPower){
         //chute.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        chute.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        chute.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         double cmOffset = pos;
 
@@ -679,10 +679,10 @@ public class AutonomousPrime2021 extends LinearOpMode {
      * Move robot forwards by cm
      */
     public void forwardEncoder(double pos, double MotorPower){ //1 pos = 25 cm
-        frontLeft.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        backLeft.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        frontRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        backRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         double cmOffset = pos;
 
@@ -714,10 +714,10 @@ public class AutonomousPrime2021 extends LinearOpMode {
      * Move robot backwards by cm
      */
     public void reverseEncoder(double pos, double MotorPower){
-        frontLeft.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        backLeft.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        frontRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        backRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         double cmOffset = pos;
 
@@ -748,10 +748,10 @@ public class AutonomousPrime2021 extends LinearOpMode {
      * Strafe robot left by cm
      */
     public void strafeLeftEncoder(double pos, double MotorPower){
-        frontLeft.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        backLeft.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        frontRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        backRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         double cmOffset = pos;
 
@@ -779,10 +779,10 @@ public class AutonomousPrime2021 extends LinearOpMode {
      * Strafe robot right by cm
      */
     public void strafeRightEncoder(double pos, double MotorPower){
-        frontLeft.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        backLeft.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        frontRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        backRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         double cmOffset = pos;
 
@@ -810,10 +810,10 @@ public class AutonomousPrime2021 extends LinearOpMode {
      * Turn robot left by degrees
      */
     public void leftEncoder(double degrees, double MotorPower){
-        frontLeft.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        backLeft.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        frontRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        backRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         frontRight.setTargetPosition((int)(degrees/ COUNT_PER_DEGREE));
         frontLeft.setTargetPosition((int)(-degrees/ COUNT_PER_DEGREE));
@@ -839,10 +839,10 @@ public class AutonomousPrime2021 extends LinearOpMode {
      * Turn robot right by degrees
      */
     public void rightEncoder(double degrees, double MotorPower){
-        frontLeft.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        backLeft.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        frontRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        backRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         frontRight.setTargetPosition((int)(-degrees/ COUNT_PER_DEGREE));
         frontLeft.setTargetPosition((int)(degrees/ COUNT_PER_DEGREE));
