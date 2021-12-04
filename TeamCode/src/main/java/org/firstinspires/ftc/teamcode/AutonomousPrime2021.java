@@ -102,6 +102,8 @@ public class AutonomousPrime2021 extends LinearOpMode {
     protected DcMotorEx chute = null;
     protected DcMotorEx intake = null;
 
+    protected DcMotorEx dArm = null;
+
 
 
     /*
@@ -200,6 +202,8 @@ public class AutonomousPrime2021 extends LinearOpMode {
         intake.setDirection(DcMotor.Direction.REVERSE);
 
         chute = hardwareMap.get(DcMotorEx.class, "chute");
+
+        dArm = hardwareMap.get(DcMotorEx.class, "dArm");
 
 
 
@@ -673,6 +677,48 @@ public class AutonomousPrime2021 extends LinearOpMode {
                 leftEncoder((newAngle - initialAngle)-180,MotorPower); //Doesn't work
             }
         }
+    }
+
+    /**
+     * Move arm up by pos at the speed passed
+     */
+    public void dArm(double pos, double MotorPower){
+        dArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        double cmOffset = pos;
+
+        dArm.setTargetPosition((int)(cmOffset* COUNT_PER_ROTATION));
+
+        dArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        dArm.setPower(MotorPower);
+
+        /*while (opModeIsActive() && (dArm.isBusy()){
+            telemetry.addData("D Arm ",dArm.isBusy());
+            telemetry.update();
+        }*/
+
+    }
+
+    /**
+     * Move arm up by pos at the speed passed
+     */
+    public void dArmWait(double pos, double MotorPower){
+        dArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        double cmOffset = pos;
+
+        dArm.setTargetPosition((int)(cmOffset* COUNT_PER_ROTATION));
+
+        dArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        dArm.setPower(MotorPower);
+
+        while (opModeIsActive() && (dArm.isBusy())){
+            telemetry.addData("D Arm ",dArm.isBusy());
+            telemetry.update();
+        }
+
     }
 
     /**

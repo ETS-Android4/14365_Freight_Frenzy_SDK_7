@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
@@ -14,6 +15,7 @@ public class EmptyTeleOp extends LinearOpMode {
         DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
         DcMotor backRight = hardwareMap.dcMotor.get("backRight");
         DcMotor intake = hardwareMap.dcMotor.get("intake");
+        CRServo intakeDrop = hardwareMap.crservo.get("intakeDrop");
 
         //DcMotor duckSpinny = hardwareMap.dcMotor.get("duckSpinny");
 
@@ -51,6 +53,14 @@ public class EmptyTeleOp extends LinearOpMode {
                 intake.setPower(-1);
             } else if(!gamepad1.left_bumper) {
                 intake.setPower(0);
+            }
+            if(gamepad1.dpad_up) {
+                intakeDrop.setPower(1);
+            }
+            else if(gamepad1.dpad_down) {
+                intakeDrop.setPower(-1);
+            } else{
+                intakeDrop.setPower(0);
             }
 
             /*if(gamepad1.left_trigger > 0.1) {

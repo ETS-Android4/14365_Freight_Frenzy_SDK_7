@@ -112,18 +112,20 @@ public class BlueStorageStorage extends AutonomousPrime2021 {
         //Spin duck
 
         strafeRightEncoder(22, 0.5);
-        rightEncoder(110,0.25);
+        rightEncoder(100,0.25);
 
-        double idealWobblePos=17.4;
+        dArm(15,0.25);
+
+        double idealWobblePos=16.4;
         updateRightDist();
         int count = 0;
         while(RightDist==0 || RightDist>800){
-            updateBackRightDist();
+            updateRightDist();
             telemetry.addData("Getting valid dist sensor ", "info");
             telemetry.update();
             count++;
             if(count>25){
-                reverseEncoder(25,0.5);
+                strafeRightEncoder(25,0.5);
                 count=0;
             }
         }
@@ -133,35 +135,32 @@ public class BlueStorageStorage extends AutonomousPrime2021 {
         duckSpin(3,1);
 
 
-        forwardEncoder(45,1);
+        forwardEncoder(38,1); //Was 45
+
+        strafeLeftEncoder(15,0.5);
 
 
-        zeroBotEncoderOffset(-200, 0.25); //Was 180, -200
+        //leftEncoder(90,1);
 
-        spinIntake(1);
+        //spinIntake(1);
 
 
         if(DuckPosition == 0) {
-            reverseEncoder(45, 0.5);
-            //pick up capping elem
-            pause(3);
-            reverseEncoder(40, 0.5);
-            pause(3);
+            strafeLeftEncoder(45, 0.5);
+            dArmWait(-5,0.25);
+            strafeLeftEncoder(40, 0.5);
         } else if(DuckPosition == 1) {
-            reverseEncoder(20, 0.5);
-            //pick up capping elem
-            pause(3);
-            reverseEncoder(65, 0.5);
-            pause(3);
+            strafeLeftEncoder(20, 0.5);
+            dArmWait(-5,0.25);
+            strafeLeftEncoder(65, 0.5);
         } else if(DuckPosition == 2){
-            //pick up capping elem, should already be right there
-            pause(3);
-            reverseEncoder(85, 0.5);
-            pause(3);
+            dArmWait(-5,0.25);
+            strafeLeftEncoder(85, 0.5);
+            //This arm is in no way affiliated with Danny McDowell.
+            //Any complaints should be filed to Gustav Nelson.
         }
 
-        forwardEncoder(50, 0.5);
-        zeroBotEncoderOffset(-90,0.5);
+        strafeRightEncoder(50, 0.5);
         pause(1);
         vuforiaTrack();
         telemetry.update();
@@ -177,7 +176,7 @@ public class BlueStorageStorage extends AutonomousPrime2021 {
 
             vuforiaTrack();
 
-            double ParkXPos = -50; //-62.9, then -60 (little change- positive?), then -55(little more change, within the square, positive), then -50 (perfect)
+            double ParkXPos = -60; //-50 (too far "south"), -55, -65 (too far "north"), -60
             forwardEncoder(VufXPos - ParkXPos, 0.25);
             double ParkYPos = 45; //Update with position goal 40.9, then 35
             strafeLeftEncoder(VufYPos - ParkYPos, 0.25);

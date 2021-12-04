@@ -12,16 +12,18 @@ public class PositionTestBlue extends AutonomousPrime2021 {
         waitForStart();
 
         while(!isStopRequested()) {
-            updateBackRightDist();
-            updateLeftDist();
-            telemetry.addData("BackRightDist: ", BackRightDist);
-            telemetry.addData("LeftDist: ", LeftDist);
+            updateRightDist();
+            telemetry.addData("RightDist: ", RightDist);
             telemetry.update();
         }
 
-        chute(10,0.5);
+        //dArm(-5,0.25);
+        //pause(5);
+
+        //chute(10,0.5);
 
         //hi logan -Jacob
         //What da dog doin? -Nate
+        //Ur mom -Abraham Lincoln
     }
 }
