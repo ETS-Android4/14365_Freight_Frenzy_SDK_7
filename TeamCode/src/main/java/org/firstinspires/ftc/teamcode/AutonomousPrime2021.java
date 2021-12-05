@@ -112,7 +112,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
      ********************
      */
 
-    protected Servo intakeDrop;
+    //protected Servo intakeDrop;
 
 
 
@@ -215,7 +215,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
 
 
 
-        intakeDrop = hardwareMap.get(Servo.class, "intakeDrop");
+        //intakeDrop = hardwareMap.get(Servo.class, "intakeDrop");
 
 
 
@@ -354,7 +354,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
      * Drop intake device
      */
     public void dropIntake(double position){
-        intakeDrop.setPosition(position);
+        //intakeDrop.setPosition(position);
     }
     /**
      * Spin intake

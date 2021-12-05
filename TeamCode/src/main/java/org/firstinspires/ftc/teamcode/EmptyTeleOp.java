@@ -14,8 +14,14 @@ public class EmptyTeleOp extends LinearOpMode {
         DcMotor backLeft = hardwareMap.dcMotor.get("backLeft");
         DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
         DcMotor backRight = hardwareMap.dcMotor.get("backRight");
+
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         DcMotor intake = hardwareMap.dcMotor.get("intake");
-        CRServo intakeDrop = hardwareMap.crservo.get("intakeDrop");
+        //CRServo intakeDrop = hardwareMap.crservo.get("intakeDrop");
 
         //DcMotor duckSpinny = hardwareMap.dcMotor.get("duckSpinny");
 
@@ -54,14 +60,14 @@ public class EmptyTeleOp extends LinearOpMode {
             } else if(!gamepad1.left_bumper) {
                 intake.setPower(0);
             }
-            if(gamepad1.dpad_up) {
+            /*if(gamepad1.dpad_up) {
                 intakeDrop.setPower(1);
             }
             else if(gamepad1.dpad_down) {
                 intakeDrop.setPower(-1);
             } else{
                 intakeDrop.setPower(0);
-            }
+            }*/
 
             /*if(gamepad1.left_trigger > 0.1) {
                 duckSpinny.setPower(1);

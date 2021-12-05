@@ -104,26 +104,52 @@ public class BlueWarehouseWarehouse extends AutonomousPrime2021 {
             telemetry.update();
         }
 
+        reverseEncoder(60, 0.5);
+        pause(0.5);
+        strafeRightEncoder(55, 0.5);
+        pause(0.5);
+        //Drop off preloaded element
+
+        if(DuckPosition == 1) {
+            forwardEncoder(50, 0.5);
+        } else if(DuckPosition == 2 ) {
+            forwardEncoder(10, 0.5);
+        } else {
+            forwardEncoder(100, 0.5);
+            //stay and get the shipping element
+        }
+        pause(0.5);
+
+
         strafeRightEncoder(70, 0.5);
         zeroBotEncoder(0.5);
         pause(0.5);
         forwardEncoder(110, 0.5);
 
         pause(0.5);
-        strafeRightEncoder(50, 0.5);
-        pause(0.5);
-        reverseTime(1.5, 0.15);
+//        strafeRightEncoder(50, 0.5);
+//        pause(0.5);
+//        reverseTime(1.5, 0.15);
 //Initialize odometry for inside warehouse
-        leftEncoder(60, 0.5);
-        forwardEncoder(50, 0.5);
+        zeroBotEncoder(0.5);
+        rightEncoder(143, 0.5);
+        updateFrontDist();
+        updateLeftDist();
+        reverseEncoder(50, 0.5);
         pause(0.5);
-        rightEncoder(45, 0.5);
+        updateFrontDist();
+        updateLeftDist();
+        rightEncoder(41.5, 0.5);
         pause(0.5);
-        strafeRightEncoder(15, 0.5);
-        reverseEncoder(130, 0.5);
+        updateFrontDist();
+        updateLeftDist();
+        strafeLeftEncoder(15, 0.5);
+        updateFrontDist();
+        updateLeftDist();
+        forwardEncoder(170, 0.5);
         pause(0.5);
-        rightEncoder(180, 0.5);
-        zeroBotEncoderOffset(180,0.5);
+//        rightEncoder(180, 0.5);
+//        zeroBotEncoderOffset(180,0.5);
 
 
         pause(1); //Was 0.5
@@ -134,9 +160,9 @@ public class BlueWarehouseWarehouse extends AutonomousPrime2021 {
         telemetry.addData("Vuforia X Pos: ", VufXPos);
         telemetry.addData("Vuforia Y Pos: ", VufYPos);
         telemetry.addData("Vuforia Heading: ", VufHeading);
-        int idealXPos = 0; //Change This Value
-        int idealYPos = 0; //Change This Value
-        int idealHeading = 0; //Change This Value
+        int idealXPos = 66; //Change This Value
+        int idealYPos = 3; //Change This Value
+        int idealHeading = 275; //Change This Value
 
         /*if(targetVisible) {                       //NEEDS TESTING TO SEE HOW TO SET THE OFFSET OR IF ITS EVEN NECESSARY AT ALL
             if(VufHeading>=0&&VufHeading<180){
@@ -150,12 +176,12 @@ public class BlueWarehouseWarehouse extends AutonomousPrime2021 {
 
         vuforiaTrack();
         while(!targetVisible) {
-            forwardEncoder(5, 0.5);
+            reverseEncoder(5, 0.5);
             vuforiaTrack();
         }
         if(targetVisible) {
             vuforiaTrack();
-            forwardEncoder(VufXPos - idealXPos, 0.25); //Was forward encoder, but I think it would be going backwards, not forwards, I haven't tested this though
+            reverseEncoder(VufXPos - idealXPos, 0.25); //Was forward encoder, but I think it would be going backwards, not forwards, I haven't tested this though
             strafeLeftEncoder(VufYPos - idealYPos, 0.25);
         }
 
