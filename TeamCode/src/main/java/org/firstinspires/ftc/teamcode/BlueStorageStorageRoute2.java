@@ -1,6 +1,12 @@
 package org.firstinspires.ftc.teamcode;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import java.util.List;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -11,8 +17,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +27,9 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XZY;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 
 
-@Autonomous(name="BlueWarehouseWarehouseRoute2", group="linearOpMode")
-public class BlueWarehouseWarehouseRoute2 extends AutonomousPrime2021 {
+
+@Autonomous(name="BlueStorageStorageRoute2", group="linearOpMode")
+public class BlueStorageStorageRoute2 extends AutonomousPrime2021 {
 
     /*
      ***********************
@@ -103,46 +108,42 @@ public class BlueWarehouseWarehouseRoute2 extends AutonomousPrime2021 {
             telemetry.addData("Duck Position: ", DuckPosition);
             telemetry.update();
         }
+        //Go pick up the shipping element
+        if(DuckPosition == 1) {
+            reverseEncoder(15, 0.5);
+            pause(0.5);
+            strafeRightEncoder(40, 0.5);
+            //pick up element
+            pause(0.5);
+            //Going to drop off the preloaded element
+            strafeLeftEncoder(10, 0.5);
+        } else if(DuckPosition == 2) {
+            reverseEncoder(35, 0.5);
+            pause(0.5);
+            strafeRightEncoder(40, 0.5);
+            //pick up element
+            pause(0.5);
+            //Going to drop off the preloaded element
+            strafeRightEncoder(10, 0.5);
 
-//******************************************
-//*             NEEDS TESTING              *
-//******************************************
-        reverseEncoder(140,0.5);
-        strafeRightEncoder(30, 0.5);
-        leftEncoder(180, 0.5);
-        //pick cube up
-        reverseEncoder(140, 0.5);
-        rightEncoder(180, 0.5);
-
-        //Get vuforia info
-        vuforiaTrack();
-        telemetry.addData("Vuforia X Pos: ", VufXPos);
-        telemetry.addData("Vuforia Y Pos: ", VufYPos);
-        telemetry.addData("Vuforia Heading: ", VufHeading);
-        int idealXPos = 0; //Change This Value
-        int idealYPos = 0; //Change This Value
-        int idealHeading = 0; //Change This Value
-                                                        //Most of this is code Logan implemented in BlueWarehouseWarehouse, but I added the while(!targetVisible) in the unlikely event the robot can't see it, most likely it will be too short not far
-        //Go over if targer isn't visible
-        while(!targetVisible) {
-            forwardEncoder(5, 0.5);
-            vuforiaTrack();
+        } else {
+            forwardEncoder(15, 0.5);
+            pause(0.5);
+            strafeRightEncoder(40, 0.5);
+            //pick up element
+            pause(0.5);
+            //Going to drop off the preloaded element
+            strafeLeftEncoder(10, 0.5);
         }
-           /*if(targetVisible) {                       //NEEDS TESTING TO SEE HOW TO SET THE OFFSET OR IF ITS EVEN NECESSARY AT ALL
-            if(VufHeading>=0&&VufHeading<180){
-                rightEncoder(VufHeading, 0.15);
-            }
-            else if (VufHeading>=180&&VufHeading<360){
-                leftEncoder((360-VufHeading), 0.15);
-            }
 
-        }*/
-        vuforiaTrack();
-        if(targetVisible) {
-            vuforiaTrack();
-            reverseEncoder(VufXPos - idealXPos, 0.25); //Was forward encoder, but I think it would be going backwards, not forwards, I haven't tested this though
-            strafeLeftEncoder(VufYPos - idealYPos, 0.25);
-        }
+
+
+
+
+
+
+
+
 
     }
 

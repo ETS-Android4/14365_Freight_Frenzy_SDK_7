@@ -132,7 +132,9 @@ public class BlueStorageStorage extends AutonomousPrime2021 {
         strafeRightEncoder(RightDist-idealWobblePos,0.25);
         //reverseEncoder(46, 0.5);
 
-        duckSpin(3,1);
+
+        //Need to figure out servo values for duck spin
+//        duckSpin(3,1);
 
 
         forwardEncoder(38,1); //Was 45

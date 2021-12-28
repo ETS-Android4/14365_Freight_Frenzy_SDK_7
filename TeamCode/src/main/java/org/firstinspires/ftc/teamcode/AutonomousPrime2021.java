@@ -96,13 +96,15 @@ public class AutonomousPrime2021 extends LinearOpMode {
      *************************
      */
 
-    protected DcMotorEx duckSpinny = null;
 
 
-    protected DcMotorEx chute = null;
+
+
     protected DcMotorEx intake = null;
-
+    protected DcMotorEx linearSlide = null;
     protected DcMotorEx dArm = null;
+
+
 
 
 
@@ -113,7 +115,8 @@ public class AutonomousPrime2021 extends LinearOpMode {
      */
 
     //protected Servo intakeDrop;
-
+    protected Servo duckSpinny = null;
+    protected Servo chute = null;
 
 
 
@@ -193,15 +196,17 @@ public class AutonomousPrime2021 extends LinearOpMode {
         frontRight.setTargetPositionTolerance(50);
         backRight.setTargetPositionTolerance(50);
 
-        duckSpinny=hardwareMap.get(DcMotorEx.class,"duckSpinny");
-        duckSpinny.setDirection(DcMotor.Direction.FORWARD);
+
 
 
 
         intake = hardwareMap.get(DcMotorEx.class, "intake");
         intake.setDirection(DcMotor.Direction.REVERSE);
 
-        chute = hardwareMap.get(DcMotorEx.class, "chute");
+        linearSlide = hardwareMap.get(DcMotorEx.class, "linearSlide");
+        linearSlide.setDirection(DcMotorSimple.Direction.FORWARD);
+
+
 
         dArm = hardwareMap.get(DcMotorEx.class, "dArm");
 
@@ -213,6 +218,10 @@ public class AutonomousPrime2021 extends LinearOpMode {
          *****************
          */
 
+        duckSpinny=hardwareMap.get(Servo.class,"duckSpinny");
+        duckSpinny.setDirection(Servo.Direction.FORWARD);
+
+        chute = hardwareMap.get(Servo.class, "chute");
 
 
         //intakeDrop = hardwareMap.get(Servo.class, "intakeDrop");
@@ -313,42 +322,37 @@ public class AutonomousPrime2021 extends LinearOpMode {
     /**
      * Spin duck for seconds
      */
-    public void duckSpin(double seconds, double MotorPower){
-        duckSpinny.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        duckSpinny.setPower(MotorPower);
-        pause(seconds);
-        duckSpinny.setPower(0);
+    public void duckSpin(double position){
+        duckSpinny.setPosition(position);
     }
 
     /**
      * Move chute conveyor
      */
 
-    public void chute(double pos, double MotorPower){
-        //chute.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        chute.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    public void chute(double pos){
+        chute.setPosition(pos);
+    }
+
+    public void linearSlide(double pos, double MotorPower) {
+        linearSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         double cmOffset = pos;
 
-        chute.setTargetPosition((int)(cmOffset));
+        linearSlide.setTargetPosition((int)(cmOffset* COUNT_PER_ROTATION));
 
-        chute.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        chute.setPower(MotorPower);
-
-        while (opModeIsActive() && (chute.isBusy())){
-            telemetry.addData("Chute: ",chute.isBusy());
-            telemetry.update();
-        }
+        linearSlide.setPower(MotorPower);
     }
 
-    public void chuteTime(double secs, double MotorPower){
-        chute.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        chute.setPower(MotorPower);
-
-        pause(secs);
-        chute.setPower(0);
-    }
+//    public void chuteTime(double secs, double MotorPower){
+//        chute.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        chute.setPower(MotorPower);
+//
+//        pause(secs);
+//        chute.setPower(0);
+//    }
 
     /**
      * Drop intake device

@@ -103,7 +103,7 @@ public class BlueWarehouseWarehouse extends AutonomousPrime2021 {
             telemetry.addData("Duck Position: ", DuckPosition);
             telemetry.update();
         }
-
+        //Going to drop off the preloaded cube
         reverseEncoder(60, 0.5);
         pause(0.5);
         strafeRightEncoder(55, 0.5);
