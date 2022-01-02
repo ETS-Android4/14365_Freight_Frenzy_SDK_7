@@ -38,10 +38,12 @@ public class EmptyTeleOp extends LinearOpMode {
     protected DcMotorEx frontRight = null;
     protected DcMotorEx backLeft = null;
     protected DcMotorEx backRight = null;
+    protected DcMotorEx intake = null;
+
     protected double MotorPower = 1.0;
     protected final double  COUNT_PER_ROTATION = 15.641025641;
     protected final double  COUNT_PER_DEGREE = 0.16;
-    protected DcMotorEx intake = null;
+
 
     protected DistanceSensor BackLeft;
     protected double BackLeftDist = 0;
@@ -49,7 +51,7 @@ public class EmptyTeleOp extends LinearOpMode {
     protected double BackRightDist = 0;
     protected Servo chute = null;
     protected DcMotorEx linearSlide = null;
-//logan sucks at cyberpunk
+
     private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
     private static final String[] LABELS = {
             "Ball",
@@ -65,58 +67,7 @@ public class EmptyTeleOp extends LinearOpMode {
     double DuckRightPos = -1;
     int DuckPosition = 0;
 
-
-    public void mapObjects() {
-
-        /*
-         ************************
-         *   TELEMETRY READOUT  *
-         ************************
-         */
-
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-
-        /*
-         *****************
-         *   MAP MOTORS  *
-         *****************
-         */
-
-        linearSlide = hardwareMap.get(DcMotorEx.class, "linearSlide");
-        linearSlide.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
-        frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
-        backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
-        backRight = hardwareMap.get(DcMotorEx.class, "backRight");
-        frontLeft.setDirection(DcMotor.Direction.REVERSE);
-        frontRight.setDirection(DcMotor.Direction.FORWARD);
-        backLeft.setDirection(DcMotor.Direction.REVERSE);
-        backRight.setDirection(DcMotor.Direction.FORWARD);
-
-        frontLeft.setTargetPositionTolerance(50);
-        backLeft.setTargetPositionTolerance(50);
-        frontRight.setTargetPositionTolerance(50);
-        backRight.setTargetPositionTolerance(50);
-
-        intake = hardwareMap.get(DcMotorEx.class, "intake");
-        intake.setDirection(DcMotor.Direction.REVERSE);
-
-        /*
-         *****************
-         *   MAP Servos  *
-         *****************
-         */
-        chute = hardwareMap.get(Servo.class, "chute");
-
-
-        BackLeft = hardwareMap.get(DistanceSensor.class, "BackLeft");
-        BackLeftDist = BackLeft.getDistance(DistanceUnit.CM);
-
-        BackRight = hardwareMap.get(DistanceSensor.class, "BackRight");
-        BackRightDist = BackRight.getDistance(DistanceUnit.CM);
-    }
+    int chutePos = 0;
 
         /*
      ********************
@@ -210,17 +161,24 @@ public class EmptyTeleOp extends LinearOpMode {
                     prevPosition = intake.getCurrentPosition();
                     timer.reset();
                     if(speed < speed2) {
-                        chute(20);
+                        chutePos += 10;
                     }
                     speed2 = speed;
                 }
 
+            if(gamepad1.b) {
+                chutePos+=0.5;
+            } else {
+                chutePos = 0;
+            }
+            chute.setPosition(chutePos);
+
             if(gamepad1.a) {
                 //Setting up variables of where we want to be
-                int idealDist = 150;
+                int idealDist = 125;
                 int idealXPos = 66; //Change This Value
                 int idealYPos = 3; //Change This Value
-                int idealHeading = 275; //Change This Value
+                int idealHeading = 275; //Change This Valu4
 
                 //Getting distance senor information
                 updateBackDist();

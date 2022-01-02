@@ -10,7 +10,11 @@ public class PositionTestRed extends AutonomousPrime2021 {
     public void runOpMode(){
         mapObjects();
         waitForStart();
-        chute(10);
+        //chute(10);
+
+        while(!isStopRequested()){
+            duckSpin(1,1);
+        }
 
 
 

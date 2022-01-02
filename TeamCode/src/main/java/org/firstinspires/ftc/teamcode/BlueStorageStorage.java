@@ -134,7 +134,7 @@ public class BlueStorageStorage extends AutonomousPrime2021 {
 
 
         //Need to figure out servo values for duck spin
-//        duckSpin(3,1);
+        duckSpin(1,4);
 
 
         forwardEncoder(38,1); //Was 45

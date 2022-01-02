@@ -115,7 +115,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
      */
 
     //protected Servo intakeDrop;
-    protected Servo duckSpinny = null;
+    protected CRServo duckSpinny = null;
     protected Servo chute = null;
 
 
@@ -218,8 +218,8 @@ public class AutonomousPrime2021 extends LinearOpMode {
          *****************
          */
 
-        duckSpinny=hardwareMap.get(Servo.class,"duckSpinny");
-        duckSpinny.setDirection(Servo.Direction.FORWARD);
+        duckSpinny=hardwareMap.get(CRServo.class,"duckSpinny");
+        duckSpinny.setDirection(CRServo.Direction.FORWARD);
 
         chute = hardwareMap.get(Servo.class, "chute");
 
@@ -322,13 +322,16 @@ public class AutonomousPrime2021 extends LinearOpMode {
     /**
      * Spin duck for seconds
      */
-    public void duckSpin(double position){
-        duckSpinny.setPosition(position);
+    public void duckSpin(double power, double secs){
+        duckSpinny.setPower(power);
+        pause(secs);
+        duckSpinny.setPower(0);
     }
 
     /**
      * Move chute conveyor
      */
+
 
     public void chute(double pos){
         chute.setPosition(pos);
