@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -14,9 +16,9 @@ public class JacksTeleop extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
 
-        int ArmMinLimit = -10;
+        int ArmMinLimit = 0;
         //int ArmMaxLimit = 2025;
-        int ArmMaxLimit = 250;
+        int ArmMaxLimit = 2025;
 
 
 
@@ -35,18 +37,28 @@ public class JacksTeleop extends LinearOpMode {
         DcMotorEx linearSlide = hardwareMap.get(DcMotorEx.class,("linearSlide"));
         linearSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         linearSlide.setDirection(DcMotorSimple.Direction.REVERSE);
-        linearSlide.setTargetPositionTolerance(30);
+        linearSlide.setTargetPositionTolerance(10);
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        //Servo intakeDrop = hardwareMap.servo.get("intakeDrop");
+
         waitForStart();
 
         double linearSlidePosition = 0;
 
         if(isStopRequested()) return;
+
+        ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+
+        int ArmPosDPad = 0;
+
+        boolean AutoArm = false;
+
+        int linearSlideCoefficient = 5;
 
         while(opModeIsActive()) {
             double coefficient = 1;
@@ -69,33 +81,75 @@ public class JacksTeleop extends LinearOpMode {
 
 
 
-
-            if(gamepad2.left_stick_y>0.1 || gamepad2.left_stick_y<-0.1){
-                linearSlidePosition-=gamepad2.left_stick_y;
-
-                int linearSlideCoefficient = 3;
-                //"If gone above limit, don't" -Jacob
-                if(linearSlidePosition>ArmMaxLimit && gamepad2.left_stick_y>0.1){
-                    linearSlidePosition+=gamepad2.left_stick_y;
-                    telemetry.addData("Past Position And Moving Wrong: ", true);
+            if(timer.time()>150){
+                if(gamepad2.dpad_up){
+                    ArmPosDPad++;
+                    timer.reset();
                 }
-                else if(linearSlidePosition<ArmMinLimit && gamepad2.left_stick_y<-0.1){
-                    linearSlidePosition+=gamepad2.left_stick_y;
-                    telemetry.addData("Past Position And Moving Wrong: ", true);
+                else if(gamepad2.dpad_down){
+                    ArmPosDPad--;
+                    timer.reset();
                 }
-                else {
-                    linearSlide.setTargetPosition((int) (linearSlideCoefficient * linearSlidePosition));
-                    linearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    linearSlide.setPower(1);
-                    telemetry.addData("Within Position: ", true);
+
+            }
+
+
+            if(gamepad2.dpad_up || gamepad2.dpad_down){
+                if(ArmPosDPad==0){
+                    //Bucket collect position
+                    linearSlidePosition=0;
+                }
+                else if (ArmPosDPad==1){
+                    //1st Wobble Level
+                    linearSlidePosition=740/linearSlideCoefficient;
+                }
+                else if(ArmPosDPad==2){
+                    //2nd Wobble Level
+                    linearSlidePosition=1140/linearSlideCoefficient;
+                }
+                else if (ArmPosDPad==3){
+                    //3rd Wobble Level
+                    linearSlidePosition=1640/linearSlideCoefficient;
+                }
+                else if(ArmPosDPad<0){
+                    //D-Pad accidentally went too far down; reset to 0
+                    ArmPosDPad=0;
+                }
+                else{
+                    //D-Pad accidentally went too far up; reset to 3
+                    ArmPosDPad=3;
                 }
             }
 
 
 
-            telemetry.addData("Linear Slide Current Pos:", linearSlide.getCurrentPosition());
-            telemetry.addData("Linear Slide Target Pos:", linearSlide.getTargetPosition());
+
+            if(gamepad2.left_stick_y>0.1 || gamepad2.left_stick_y<-0.1){
+                linearSlidePosition-=gamepad2.left_stick_y; //"Subtract" gamepad value from linear slide position (needed due to arm motor being reversed)
+
+
+                //"If gone above limit, don't" -Jacob
+                if((linearSlidePosition*linearSlideCoefficient)>ArmMaxLimit && gamepad2.left_stick_y<-0.1){  //IF (linear slide position > arm max) AND (gamepad is going UP)
+                    linearSlidePosition+=gamepad2.left_stick_y; //"Add" gamepad value from linear slide position (negating what it does above ^)
+                    telemetry.addData("Past Position And Moving Wrong: ", true); //Telemetry read out
+                }
+                else if((linearSlidePosition*linearSlideCoefficient)<ArmMinLimit && gamepad2.left_stick_y>0.1) { //IF (linear slide position < arm max) AND (gamepad is going DOWN)
+                    linearSlidePosition += gamepad2.left_stick_y; //"Add" gamepad value from linear slide position (negating what it does above ^)
+                    telemetry.addData("Past Position And Moving Wrong: ", true); //Telemetry read out
+                }
+            }
+            //Everything below sets target position based off of linear slide position above ^
+            linearSlide.setTargetPosition((int) (linearSlideCoefficient * linearSlidePosition));
+            linearSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            linearSlide.setPower(1);
+
+
+            telemetry.addData("Linear Slide Raw Ideal Pos:", linearSlidePosition);
+            telemetry.addData("Linear Slide True Pos:", linearSlide.getTargetPosition());
+            telemetry.addData("DPad Level:", ArmPosDPad);
             telemetry.update();
+
+            intake.setPower(-1);
 
 
         }

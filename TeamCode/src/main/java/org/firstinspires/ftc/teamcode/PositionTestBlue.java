@@ -11,7 +11,7 @@ public class PositionTestBlue extends AutonomousPrime2021 {
         mapObjects();
         waitForStart();
 
-        while(!isStopRequested()) {
+        /*while(!isStopRequested()) {
             updateAllDist();
             telemetry.addData("RightDist: ", RightDist);
             telemetry.addData("LeftDist: ", LeftDist);
@@ -29,7 +29,13 @@ public class PositionTestBlue extends AutonomousPrime2021 {
 
 
 
+        }*/
+
+        for(int i = 0; i<=10; i++){
+            dropIntake(i/10);
+            pause(4);
         }
+
 
 
         /*while(!isStopRequested()) {
