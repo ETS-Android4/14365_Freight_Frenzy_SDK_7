@@ -18,7 +18,7 @@ public class JacksTeleop extends LinearOpMode {
 
         int ArmMinLimit = 0;
         //int ArmMaxLimit = 2025;
-        int ArmMaxLimit = 2025;
+        int ArmMaxLimit = 1800;
 
 
 
@@ -36,7 +36,7 @@ public class JacksTeleop extends LinearOpMode {
 
         DcMotorEx linearSlide = hardwareMap.get(DcMotorEx.class,("linearSlide"));
         linearSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        linearSlide.setDirection(DcMotorSimple.Direction.REVERSE);
+        linearSlide.setDirection(DcMotorSimple.Direction.FORWARD);
         linearSlide.setTargetPositionTolerance(10);
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
