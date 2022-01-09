@@ -335,6 +335,8 @@ public class AutonomousPrime2021 extends LinearOpMode {
 
     public void chute(double pos){
         chute.setPosition(pos);
+        telemetry.addData("Servo Pos: ", pos);
+        telemetry.update();
     }
 
     public void linearSlide(double pos, double MotorPower) {

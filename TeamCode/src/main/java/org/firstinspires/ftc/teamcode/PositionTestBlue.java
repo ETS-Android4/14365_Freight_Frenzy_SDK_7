@@ -31,10 +31,39 @@ public class PositionTestBlue extends AutonomousPrime2021 {
 
         }*/
 
-        for(int i = 0; i<=10; i++){
-            dropIntake(i/10);
-            pause(4);
-        }
+        chute(0);
+        pause(4);
+
+
+        chute(0.1);
+        pause(4);
+
+        chute(0.2);
+        pause(4);
+
+        chute(0.3);
+        pause(4);
+
+        chute(0.4);
+        pause(4);
+
+        chute(0.5);
+        pause(4);
+
+        chute(0.6);
+        pause(4);
+
+        chute(0.7);
+        pause(4);
+
+        chute(0.8);
+        pause(4);
+
+        chute(0.9);
+        pause(4);
+
+        chute(1);
+        pause(4);
 
 
 
