@@ -240,7 +240,6 @@ public class AutonomousPrime2021 extends LinearOpMode {
         GroundFrontDist=GroundFront.getDistance(DistanceUnit.CM);
 
         GroundBack = hardwareMap.get(DistanceSensor.class, "GroundBack");
-        GroundBackDist = GroundBack.getDistance(DistanceUnit.CM);
 
         Left = hardwareMap.get(DistanceSensor.class, "Left");
         LeftDist = Left.getDistance(DistanceUnit.CM);
@@ -339,6 +338,10 @@ public class AutonomousPrime2021 extends LinearOpMode {
         telemetry.update();
     }
 
+    /**
+     * Move linear slide to given position
+     */
+
     public void linearSlide(double pos, double MotorPower) {
         linearSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -398,7 +401,7 @@ public class AutonomousPrime2021 extends LinearOpMode {
      * Update All Dist Sensor Values
      */
     public void updateAllDist(){
-        GroundFrontDist=GroundFront.getDistance(DistanceUnit.CM);
+       GroundFrontDist=GroundFront.getDistance(DistanceUnit.CM);
         GroundBackDist = GroundBack.getDistance(DistanceUnit.CM);
         LeftDist = Left.getDistance(DistanceUnit.CM);
         RightDist = Right.getDistance(DistanceUnit.CM);
@@ -481,8 +484,10 @@ public class AutonomousPrime2021 extends LinearOpMode {
     /**
      * Update Ground Sensor Values
      */
-    public void updateGroundDist(){
-        GroundFrontDist=GroundFront.getDistance(DistanceUnit.CM);
+
+    //Can't use this function because the build team messed up plugging in these distance sensors, thanks build team! :) -Cole   \   /
+    public void updateGroundDist(){                                                                                           //  o  o
+        GroundFrontDist=GroundFront.getDistance(DistanceUnit.CM);                                                             //  ----\
         GroundBackDist = GroundBack.getDistance(DistanceUnit.CM);
     }
 
@@ -517,33 +522,15 @@ public class AutonomousPrime2021 extends LinearOpMode {
         }
         line += data;
     }
-    public void addData(Object data) {
-        addData(data.toString());
-    }
-    public void addData(boolean data) {
-        addData(String.valueOf(data));
-    }
-    public void addData(byte data) {
-        addData(String.valueOf(data));
-    }
-    public void addData(char data) {
-        addData(String.valueOf(data));
-    }
-    public void addData(short data) {
-        addData(String.valueOf(data));
-    }
-    public void addData(int data) {
-        addData(String.valueOf(data));
-    }
-    public void addData(long data) {
-        addData(String.valueOf(data));
-    }
-    public void addData(float data) {
-        addData(String.valueOf(data));
-    }
-    public void addData(double data) {
-        addData(String.valueOf(data));
-    }
+    public void addData(Object data) { addData(data.toString()); }
+    public void addData(boolean data) { addData(String.valueOf(data)); }
+    public void addData(byte data) { addData(String.valueOf(data)); }
+    public void addData(char data) { addData(String.valueOf(data)); }
+    public void addData(short data) { addData(String.valueOf(data)); }
+    public void addData(int data) { addData(String.valueOf(data)); }
+    public void addData(long data) { addData(String.valueOf(data)); }
+    public void addData(float data) { addData(String.valueOf(data)); }
+    public void addData(double data) { addData(String.valueOf(data)); }
 
 
 
@@ -555,11 +542,19 @@ public class AutonomousPrime2021 extends LinearOpMode {
 
     //NOTES: Should track 0-360 degrees and reset at 360; make an IMU "setAngle()" that takes IN an angle and sets that to globalAngle (so IMU tracks from there)
 
+    /**
+     * Resetting the robots current angle to 0
+     */
+
     public void resetAngle(){
         lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         globalAngle = 0;
     }
+
+    /**
+     * Telling us the robots current angle
+     */
 
     public double getAngle(){
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
@@ -584,6 +579,10 @@ public class AutonomousPrime2021 extends LinearOpMode {
         return globalAngle;
 
     }
+
+    /**
+     * Setting the robots current angle to the angle given
+     */
 
     public void setAngle(double angle) {
         globalAngle = angle;
@@ -666,6 +665,10 @@ public class AutonomousPrime2021 extends LinearOpMode {
 
     }
 
+    /**
+     * Zerobot, moving the robot to the initial angle
+     */
+
     public void zeroBotEncoder(double MotorPower){
         double newAngle = getAngle();
         double deltaAngle = initialAngle-newAngle;
@@ -677,6 +680,10 @@ public class AutonomousPrime2021 extends LinearOpMode {
         }
         leftEncoder(deltaAngle,MotorPower);
     }
+
+    /**
+     * Zerobot, except it moves to the initial angle which is offset by a given value
+     */
 
     public void zeroBotEncoderOffset(double AngleOffset, double MotorPower){
         double newAngle = getAngle();
@@ -967,6 +974,10 @@ public class AutonomousPrime2021 extends LinearOpMode {
 
         }
     }
+
+    /**
+     * Going backwards for a given amount of time
+     */
 
     public void reverseTime(double secs, double MotorPower){
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

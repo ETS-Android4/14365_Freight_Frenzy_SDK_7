@@ -11,6 +11,11 @@ public class PositionTestBlue extends AutonomousPrime2021 {
         mapObjects();
         waitForStart();
 
+        duckSpin(1,5);
+        pause(2);
+
+
+
         /*while(!isStopRequested()) {
             updateAllDist();
             telemetry.addData("RightDist: ", RightDist);
@@ -31,7 +36,11 @@ public class PositionTestBlue extends AutonomousPrime2021 {
 
         }*/
 
-        chute(0);
+        /*rightEncoder(90, 0.5);
+        pause(1);
+        leftEncoder(90, 0.5);*/
+
+        /*chute(0);
         pause(4);
 
 
@@ -63,7 +72,7 @@ public class PositionTestBlue extends AutonomousPrime2021 {
         pause(4);
 
         chute(1);
-        pause(4);
+        pause(4);*/
 
 
 

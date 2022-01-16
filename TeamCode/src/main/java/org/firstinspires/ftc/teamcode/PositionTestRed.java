@@ -12,9 +12,10 @@ public class PositionTestRed extends AutonomousPrime2021 {
         waitForStart();
         //chute(10);
 
-        while(!isStopRequested()){
-            duckSpin(1,1);
-        }
+//        while(!isStopRequested()){
+//            duckSpin(1,1);
+//        }
+        forwardEncoder(50, 0.5);
 
 
 
